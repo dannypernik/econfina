@@ -20,6 +20,19 @@ $alert-color: #850017;
 @import "../scss/_tables.scss";
 
 @import "menu.css";
+// Mixins //
+
+@mixin fill-color($color: $logo-color-3) {
+  background-color: $color;
+  border-color: $color;
+  color: white;
+}
+
+@mixin underline-hover($color: $hover-color) {
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-color: $color;
+}
 
 // Base //
 
@@ -89,11 +102,10 @@ h6, .h6 {
 a {
   display: inline-block;
   text-decoration: none;
-  color: darken($secondary-color, 15%);
-  transition: all 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
 
   &:hover {
-    color: $secondary-color;
+    @include underline-hover();
   }
 
   &:before {
@@ -118,17 +130,16 @@ button, .btn, input[type="submit"] {
   display: block;
   margin: 2rem auto;
   padding: 1rem 2rem;
-  background-color: $primary-color;
-  border: 2px solid $primary-color;
+  background-color: $secondary-color;
+  border: 2px solid $secondary-color;
+  border-radius: 3px;
   color: white;
   transition: 0.3s;
   font-size: 1.7rem;
   font-weight: 600;
 
   &:hover {
-    background-color: $secondary-color;
-    border-color: $secondary-color;
-    color: white;
+    @include fill-color();
   }
 
   .btn.clr {
@@ -321,9 +332,17 @@ select {
   a {
     color: white;
 
-    &:hover, &:hover h2 {
+    &:hover {
       font-weight: 600;
-      color: white;
+      @include underline-hover($logo-color-3);
+      
+      svg {
+        color: $secondary-color;
+      }
+    }
+
+    &.btn:hover {
+        text-decoration: none;
     }
   }
 
@@ -332,10 +351,13 @@ select {
     border-color: $secondary-color;
 
     &:hover {
-      background-color: darken($secondary-color, 15%);
-      border-color: darken($secondary-color, 15%);
+      @include fill-color();
     }
   }
+}
+
+#creatorsweb {
+  font-weight: 600;
 }
 
 .img-fluid {
@@ -503,6 +525,7 @@ div.message {
     text-transform: capitalize;
 
     &:hover, &:focus {
+      @include underline-hover();
       font-weight: 600;
     }
   }
@@ -522,6 +545,18 @@ div.message {
   display: table;
   margin: calc(2rem + 1vw) auto 3rem;
   text-align: center;
+
+  &:hover {
+    a {
+      text-decoration: none;
+    }
+    h4 {
+      font-weight: 600;
+    }
+    svg {
+      color: $hover-color;
+    }
+  }
 }
 
 .bi-chevron-down {
