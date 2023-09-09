@@ -50,7 +50,61 @@ class User(UserMixin, db.Model):
             return
         return User.query.get(id)
 
-
 @login.user_loader
 def load_user(id):
     return User.query.get(id)
+
+
+class Item(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    price = db.Column(db.String(6))
+    description = db.Column(db.String(1024))
+    order = db.Column(db.Float())
+    status = db.Column(db.String(16))
+    category_id = db.Column(db.Integer, db.ForeignKey('item_category.id'))
+
+    def __repr__(self):
+        return '<Item {}>'.format(self.name)
+
+
+class ItemCategory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    order = db.Column(db.Float())
+    items = db.relationship('Item', backref='item_section', lazy='dynamic')
+
+    def __repr__(self):
+        return '<ItemCategory {}>'.format(self.name)
+
+
+class Faq(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String(256))
+    answer = db.Column(db.String(1024))
+    category_id = db.Column(db.Integer, db.ForeignKey('faq_category.id'))
+
+    def __repr__(self):
+        return '<Faq {}>'.format(self.name)
+
+
+class FaqCategory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    order = db.Column(db.Float())
+    faqs = db.relationship('Faq', backref='faq_section', lazy='dynamic')
+
+    def __repr__(self):
+        return '<FaqCategory {}>'.format(self.name)
+
+
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    title = db.Column(db.String(128))
+    message = db.Column(db.String(1024))
+    order = db.Column(db.Float())
+    is_approved = db.Column(db.Boolean)
+
+    def __repr__(self):
+        return '<Review {}>'.format(self.name)

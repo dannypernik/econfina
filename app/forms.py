@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, BooleanField, PasswordField, TextAreaField, \
-    SubmitField, IntegerField, SelectField, validators
+    SubmitField, IntegerField, SelectField, DecimalField, validators
 from wtforms.fields.html5 import DateField
 from wtforms.validators import ValidationError, InputRequired, DataRequired, \
     Email, EqualTo, Length
-from app.models import User
+from app.models import User, Item, ItemCategory, Faq, FaqCategory, Review
 
 
 def validate_email(self, email):
@@ -23,6 +23,51 @@ class ContactForm(FlaskForm):
     message = TextAreaField('Message', render_kw={"placeholder": "Message"}, \
         validators=[InputRequired()])
     submit = SubmitField('Submit')
+
+
+class ItemForm(FlaskForm):
+    name = StringField('Item name', render_kw={'placeholder': 'Item name'}, \
+        validators=[InputRequired()])
+    price = StringField('Price', render_kw={'placeholder': 'Price'}, \
+        validators=[InputRequired()])
+    description = TextAreaField('Description', render_kw={'placeholder': 'Description'})
+    category_id = SelectField('Category', coerce=int)
+    order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
+        validators=(validators.Optional(),))
+    save = SubmitField('Save')
+
+
+class ItemCategoryForm(FlaskForm):
+    name = StringField('Category name', render_kw={'placeholder': 'Category name'}, \
+        validators=[InputRequired()])
+    order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
+        validators=(validators.Optional(),))
+    save = SubmitField('Save')
+
+
+class ReviewForm(FlaskForm):
+    message = TextAreaField('Share your experience', render_kw={'placeholder': 'Share your experience'})
+    name = StringField('Your name (optional)', render_kw={'placeholder': 'Your name (optional)'})
+    order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
+        validators=(validators.Optional(),))
+    save = SubmitField('Save')
+
+
+class FaqForm(FlaskForm):
+    question = TextAreaField('Question', render_kw={'placeholder': 'Question'})
+    answer = StringField('Answer', render_kw={'placeholder': 'Answer'})
+    category_id = SelectField('Category', coerce=int)
+    order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
+        validators=(validators.Optional(),))
+    save = SubmitField('Save')
+
+
+class FaqCategoryForm(FlaskForm):
+    name = StringField('Category name', render_kw={'placeholder': 'Category name'}, \
+        validators=[InputRequired()])
+    order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
+        validators=(validators.Optional(),))
+    save = SubmitField('Save')
 
 
 class EmailListForm(FlaskForm):
