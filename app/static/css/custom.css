@@ -6662,7 +6662,7 @@ html {
 body {
   height: 100%;
   font-family: "Montserrat", "Helvetica", sans-serif;
-  color: #1C4D65;
+  color: #067080;
   font-size: 1.8rem;
   font-weight: 400;
   line-height: 1.4;
@@ -6715,11 +6715,13 @@ h6, .h6 {
 a {
   display: inline-block;
   text-decoration: none;
-  color: #2aa5a0;
-  transition: all 0.2s ease-in-out;
+  color: #fc723c;
+  transition: background-color 0.2s ease-in-out;
 }
 a:hover {
-  color: #4ad1cc;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-color: #0ab9d3;
 }
 a:before {
   display: block;
@@ -6740,16 +6742,18 @@ button, .btn, input[type=submit] {
   display: block;
   margin: 2rem auto;
   padding: 1rem 2rem;
-  background-color: #1C4D65;
-  border: 2px solid #1C4D65;
+  background-color: #fc723c;
+  border: 2px solid #fc723c;
+  border-radius: 3px;
   color: white;
   transition: 0.3s;
   font-size: 1.7rem;
+  text-transform: uppercase;
   font-weight: 600;
 }
 button:hover, .btn:hover, input[type=submit]:hover {
-  background-color: #4ad1cc;
-  border-color: #4ad1cc;
+  background-color: #d45727;
+  border-color: #d45727;
   color: white;
 }
 button .btn.clr, .btn .btn.clr, input[type=submit] .btn.clr {
@@ -6757,18 +6761,18 @@ button .btn.clr, .btn .btn.clr, input[type=submit] .btn.clr {
   border-color: white;
 }
 button .btn.sec, .btn .btn.sec, input[type=submit] .btn.sec {
-  color: #1C4D65;
-  border-color: #1C4D65;
+  color: #088ea2;
+  border-color: #088ea2;
   background-color: transparent;
   font-weight: 400;
   width: fit-content;
 }
 button.highlight, .btn.highlight, input[type=submit].highlight {
-  background-color: #d35137;
+  background-color: #0f2d2f;
   border: none;
 }
 button.highlight:hover, .btn.highlight:hover, input[type=submit].highlight:hover {
-  background-color: #b94129;
+  background-color: #050f10;
 }
 button.sm, .btn.sm, input[type=submit].sm {
   font-weight: 400;
@@ -6802,10 +6806,10 @@ input, textarea {
   border-bottom: 1px solid #999;
   width: 100%;
   outline: none;
-  color: #1C4D65;
+  color: #088ea2;
 }
 input:focus, textarea:focus {
-  border-bottom: 1px solid #1C4D65;
+  border-bottom: 1px solid #088ea2;
 }
 
 input[type=checkbox] {
@@ -6827,11 +6831,11 @@ input[type=checkbox] + label::before {
   margin-right: 10px;
   width: 20px;
   height: 20px;
-  border: 2px solid #1C4D65;
+  border: 2px solid #088ea2;
   border-radius: 3px;
 }
 input[type=checkbox]:checked + label::before {
-  background-color: #1C4D65;
+  background-color: #088ea2;
 }
 input[type=checkbox]:checked + label::after {
   content: "";
@@ -6845,7 +6849,7 @@ input[type=checkbox]:checked + label::after {
   transform: rotate(-45deg);
 }
 input[type=checkbox]:focus + label::before {
-  box-shadow: 0 0px 8px #1C4D65;
+  box-shadow: 0 0px 8px #088ea2;
 }
 
 input[type=radio] {
@@ -6867,7 +6871,7 @@ input[type=radio] + label::before {
   width: 2rem;
   height: 2rem;
   background: transparent;
-  border: 2px solid #1C4D65;
+  border: 2px solid #088ea2;
   border-radius: 50%;
 }
 input[type=radio] + label::after {
@@ -6881,10 +6885,10 @@ input[type=radio] + label::after {
   height: 1rem;
 }
 input[type=radio]:checked + label::after {
-  background: #1C4D65;
+  background: #088ea2;
 }
 input[type=radio]:focus + label::before {
-  box-shadow: 0 0px 8px #1C4D65;
+  box-shadow: 0 0px 8px #088ea2;
 }
 
 .radio-wrapper {
@@ -6900,8 +6904,8 @@ input[type=radio]:focus + label::before {
 }
 
 select {
-  color: #1C4D65;
-  border: 2px solid #1C4D65;
+  color: #088ea2;
+  border: 2px solid #088ea2;
   border-radius: 10px;
   padding: 0.5rem 1rem;
 }
@@ -6912,17 +6916,30 @@ select {
 .inverse a {
   color: white;
 }
-.inverse a:hover, .inverse a:hover h2, .inverse a:hover .h2 {
+.inverse a:hover {
   font-weight: 600;
-  color: white;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-color: #fc723c;
+}
+.inverse a:hover svg {
+  color: #fc723c;
+}
+.inverse a.btn:hover {
+  text-decoration: none;
 }
 .inverse button, .inverse .btn, .inverse input[type=submit] {
-  background-color: #4ad1cc;
-  border-color: #4ad1cc;
+  background-color: #fc723c;
+  border-color: #fc723c;
 }
 .inverse button:hover, .inverse .btn:hover, .inverse input[type=submit]:hover {
-  background-color: #2aa5a0;
-  border-color: #2aa5a0;
+  background-color: #d45727;
+  border-color: #d45727;
+  color: white;
+}
+
+#creatorsweb {
+  font-weight: 600;
 }
 
 .img-fluid {
@@ -6963,8 +6980,8 @@ div.message a {
   position: sticky;
   top: 0;
   border: none;
-  border-bottom: 1px solid #1C4D65;
-  background-color: #1C4D65;
+  border-bottom: 1px solid #088ea2;
+  background-color: #088ea2;
   z-index: 100;
 }
 
@@ -7002,12 +7019,12 @@ div.message a {
 .menu-link {
   height: 60px;
   border-bottom: 1px solid white;
-  color: #1C4D65;
+  color: #088ea2;
   transition: 0.3s;
 }
 .menu-link:hover {
-  background-color: #4ad1cc;
-  border-color: #4ad1cc;
+  background-color: #fc723c;
+  border-color: #fc723c;
   color: white;
 }
 .menu-link p {
@@ -7020,17 +7037,17 @@ div.message a {
   width: 100%;
   bottom: 0;
   padding: 20px;
-  background-color: #1C4D65;
+  background-color: #088ea2;
   color: white;
   margin-top: 11rem;
 }
 
 #home-1 {
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/simon-berger-twukN12EN7c-unsplash.jpg) center bottom no-repeat;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/bg.webp) center center no-repeat;
 }
 
 #home-3 {
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/te-lun-ou-yang-TFZlTFOWReA-unsplash.jpg) center bottom no-repeat;
+  background-color: #0f2d2f;
 }
 
 #home-1, #home-3 {
@@ -7053,6 +7070,7 @@ div.message a {
 }
 
 #home-title {
+  font-family: "Rock Salt", "Montserrat", Arial, Helvetica, sans-serif;
   font-size: calc(1.8rem + 3vw);
 }
 
@@ -7076,10 +7094,45 @@ div.message a {
   font-size: 2rem;
   text-decoration: none;
   padding: calc(3rem + 2vw) 0;
-  text-transform: capitalize;
+  text-transform: uppercase;
 }
 .home-nav a:hover, .home-nav a:focus {
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-color: #fc723c;
   font-weight: 600;
+}
+
+#vid-toggle {
+  border: 2px solid var(--dynamic-color);
+  width: fit-content;
+  margin: calc(3rem + 2vw) 0;
+  padding: 6px;
+  border-radius: 9px;
+  opacity: 0.75;
+}
+#vid-toggle:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+#vid-toggle:hover #pause-play {
+  opacity: 1;
+}
+
+#pause-play {
+  border: 0;
+  background: transparent;
+  box-sizing: border-box;
+  width: 0;
+  height: 12px;
+  border-color: transparent transparent transparent var(--dynamic-color);
+  transition: 0.1s;
+  border-style: double;
+  border-width: 0px 0 0px 10px;
+}
+#pause-play.paused {
+  border-style: solid;
+  border-width: 6px 0 6px 10px;
 }
 
 .home-section {
@@ -7096,9 +7149,63 @@ div.message a {
   margin: calc(2rem + 1vw) auto 3rem;
   text-align: center;
 }
+.home-next:hover a {
+  text-decoration: none;
+}
+.home-next:hover h4, .home-next:hover .h4 {
+  font-weight: 600;
+}
+.home-next:hover svg {
+  color: #0ab9d3;
+}
 
 .bi-chevron-down {
   font-size: 1rem;
+}
+
+#video-link {
+  cursor: pointer;
+}
+#video-link:hover #play-video {
+  border-color: #0ab9d3;
+}
+
+#play-video {
+  display: inline-block;
+  line-height: 32px;
+  padding: 0.75rem 0.65rem 0.75rem 0.75rem;
+  border: 2px solid #fc723c;
+  border-radius: 25%;
+  width: fit-content;
+  cursor: pointer;
+}
+
+#play-icon {
+  height: 0;
+  width: 0;
+  border-left: 14px solid #fc723c;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+
+#video-modal .modal-header {
+  border-bottom: 0;
+}
+
+.modal-fullscreen .modal-content {
+  border-radius: 4px;
+}
+
+.btn-close {
+  --bs-btn-close-bg: none;
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #aaa;
+  opacity: 1;
+}
+.btn-close:hover {
+  color: #fc723c;
 }
 
 .profile-img {
