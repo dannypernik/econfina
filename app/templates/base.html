@@ -135,6 +135,8 @@
       </footer>
     {% endblock footer %}
 
-    {% block end_scripts %}{% endblock end_scripts %}
+    {% block end_scripts %}
+      <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    {% endblock end_scripts %}
   </body>
 </html>
