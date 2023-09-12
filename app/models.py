@@ -82,6 +82,7 @@ class Faq(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(256))
     answer = db.Column(db.String(1024))
+    order = db.Column(db.Float())
     category_id = db.Column(db.Integer, db.ForeignKey('faq_category.id'))
 
     def __repr__(self):
