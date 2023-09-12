@@ -6736,6 +6736,9 @@ a.btn {
 }
 a.btn:hover {
   text-decoration: none;
+  background-color: #fc723c;
+  border-color: #fc723c;
+  color: white;
 }
 
 button, .btn, input[type=submit] {
@@ -6755,17 +6758,6 @@ button:hover, .btn:hover, input[type=submit]:hover {
   background-color: #d45727;
   border-color: #d45727;
   color: white;
-}
-button .btn.clr, .btn .btn.clr, input[type=submit] .btn.clr {
-  background-color: transparent;
-  border-color: white;
-}
-button .btn.sec, .btn .btn.sec, input[type=submit] .btn.sec {
-  color: #088ea2;
-  border-color: #088ea2;
-  background-color: transparent;
-  font-weight: 400;
-  width: fit-content;
 }
 button.highlight, .btn.highlight, input[type=submit].highlight {
   background-color: #0f2d2f;
@@ -6796,6 +6788,19 @@ button.alert:hover, .btn.alert:hover, input[type=submit].alert:hover {
   background-color: #850017;
   border-color: #850017;
   color: white;
+}
+
+.btn.clr {
+  background-color: transparent;
+  border-color: white;
+}
+
+.btn.sec {
+  color: #fc723c;
+  border-color: #fc723c;
+  background-color: transparent;
+  font-weight: 400;
+  width: fit-content;
 }
 
 input, textarea {
@@ -7221,6 +7226,16 @@ div.message a {
 
 .semibold {
   font-weight: 600;
+}
+
+.collapsed {
+  height: 0px;
+  transition: height 0.25s ease-out;
+  overflow: hidden;
+}
+
+.category-name {
+  text-transform: capitalize;
 }
 
 /*# sourceMappingURL=custom.css.map */

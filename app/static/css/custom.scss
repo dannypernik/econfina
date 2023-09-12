@@ -132,6 +132,7 @@ a {
     
     &:hover {
       text-decoration: none;
+      @include fill-color($secondary-color);
     }
   }
 }
@@ -151,19 +152,6 @@ button, .btn, input[type="submit"] {
 
   &:hover {
     @include fill-color();
-  }
-
-  .btn.clr {
-    background-color: transparent;
-    border-color: white;
-  }
-  
-  .btn.sec {
-    color: $primary-color;
-    border-color: $primary-color;
-    background-color: transparent;
-    font-weight: 400;
-    width: fit-content;
   }
   
   &.highlight {
@@ -202,6 +190,19 @@ button, .btn, input[type="submit"] {
       color: white;
     }
   }
+}
+
+.btn.clr {
+  background-color: transparent;
+  border-color: white;
+}
+
+.btn.sec {
+  color: $secondary-color;
+  border-color: $secondary-color;
+  background-color: transparent;
+  font-weight: 400;
+  width: fit-content;
 }
 
 // Inputs //
@@ -353,7 +354,7 @@ select {
     }
 
     &.btn:hover {
-        text-decoration: none;
+      text-decoration: none;
     }
   }
 
@@ -679,4 +680,17 @@ div.message {
 
 .semibold {
   font-weight: 600;
+}
+
+
+// Admin pages
+
+.collapsed {
+  height: 0px;
+  transition: height 0.25s ease-out;
+  overflow: hidden;
+}
+
+.category-name {
+  text-transform: capitalize;
 }
