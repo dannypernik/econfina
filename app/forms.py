@@ -16,7 +16,7 @@ def validate_email(self, email):
 class ContactForm(FlaskForm):
     first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
         validators=[InputRequired()])
-    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
+    email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     phone = StringField('Phone number (optional)', render_kw={"placeholder": "Phone number (optional)"})
     subject = StringField('Subject', render_kw={'placeholder': 'Subject'}, default='Message')
@@ -32,6 +32,7 @@ class ItemForm(FlaskForm):
         validators=[InputRequired()])
     description = TextAreaField('Description', render_kw={'placeholder': 'Description'})
     category_id = SelectField('Category', coerce=int)
+    status = SelectField('Status', choices=[('active','Active'),('inactive','Inactive')])
     order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
         validators=(validators.Optional(),))
     save = SubmitField('Save')
@@ -73,14 +74,14 @@ class FaqCategoryForm(FlaskForm):
 class EmailListForm(FlaskForm):
     first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
         validators=[InputRequired()])
-    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
+    email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address"), \
             validate_email])
     submit = SubmitField()
 
 
 class SignupForm(FlaskForm):
-    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
+    email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address"), \
             validate_email])
     first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
@@ -95,7 +96,7 @@ class SignupForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
+    email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     password = PasswordField('Password', render_kw={"placeholder": "Password"}, \
         validators=[InputRequired()])
@@ -104,7 +105,7 @@ class LoginForm(FlaskForm):
 
 
 class RequestPasswordResetForm(FlaskForm):
-    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
+    email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     submit = SubmitField('Request password reset')
 
@@ -126,7 +127,7 @@ class UserForm(FlaskForm):
         validators=[InputRequired()])
     last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
         validators=[InputRequired()])
-    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
+    email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     phone = StringField('Phone', render_kw={"placeholder": "Phone"})
     location = StringField('Location', render_kw={"placeholder": "Location"})
