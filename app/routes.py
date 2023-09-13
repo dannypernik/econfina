@@ -2,14 +2,15 @@ import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, \
     request, send_from_directory, send_file, make_response
 from app import app, db, login, hcaptcha
-from app.forms import ContactForm, EmailListForm, SignupForm, LoginForm, UserForm, \
-    RequestPasswordResetForm, ResetPasswordForm
+from app.forms import ContactForm, ItemForm, ItemCategoryForm, FaqForm, FaqCategoryForm, ReviewForm, \
+    EmailListForm, SignupForm, LoginForm, UserForm, RequestPasswordResetForm, ResetPasswordForm
 from flask_login import current_user, login_user, logout_user, login_required, login_url
-from app.models import User
+from app.models import User, Item, ItemCategory, Faq, FaqCategory, Review
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app.email import send_contact_email, send_verification_email, send_password_reset_email
 from functools import wraps
+import requests
 
 @app.before_request
 def before_request():
@@ -39,6 +40,20 @@ def admin_required(f):
     return wrap
 
 
+def get_quote():
+    try:
+        quote = requests.get("https://zenquotes.io/api/today")
+
+        message = "\u301D" + quote.json()[0]['q'] + "\u301E"
+        author = "\u2013 " + quote.json()[0]['a']
+    except requests.exceptions.RequestException:
+        message = ""
+        author = ""
+    return message, author
+
+message, author = get_quote()
+
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
@@ -48,7 +63,7 @@ def index():
             pass
         else:
             flash('A computer has questioned your humanity. Please try again.', 'error')
-            return redirect(url_for('home'))
+            return redirect(url_for('index'))
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         subject = form.subject.data
@@ -64,6 +79,344 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html', title="About")
+
+
+@app.route('/reviews')
+def reviews():
+    return render_template('reviews.html', title="Reviews")
+
+
+@app.route('/choose-your-vessel')
+def choose_your_vessel():
+    return render_template('choose-your-vessel.html', title="Choose Your Vessel")
+
+
+@app.route('/faq')
+def faq():
+    return render_template('faq.html', title="FAQ")
+
+
+@app.route('/landing-page')
+def landing_page():
+    return render_template('landing-page.html', title="")
+
+
+@app.route('/admin')
+@admin_required
+def admin():
+    message, author = get_quote()
+    return render_template('admin.html', title="Admin", message=message, author=author)
+
+
+@app.route('/items', methods=['GET', 'POST'])
+@admin_required
+def items():
+    item_form = ItemForm()
+    category_form = ItemCategoryForm()
+    items = Item.query.order_by(Item.order).all()
+    categories = ItemCategory.query.order_by(ItemCategory.order).distinct()
+    category_list = [(c.id, c.name.title()) for c in categories]
+    item_form.category_id.choices = category_list
+
+    return render_template('items.html', title="Menu items", item_form=item_form, \
+        category_form=category_form, items=items, categories=categories)
+
+
+@app.route('/new-item', methods=['POST'])
+@admin_required
+def new_item():
+    item_form = ItemForm()
+    categories = ItemCategory.query.order_by(ItemCategory.order).distinct()
+    category_list = [(c.id, c.name.title()) for c in categories]
+    item_form.category_id.choices = category_list
+    if item_form.category_id.data == 0:
+        flash('Please select a category', 'error')
+        return redirect(url_for('items'))
+    if item_form.validate_on_submit():
+        item = Item(name=item_form.name.data.lower(), category_id=item_form.category_id.data, \
+            price=item_form.price.data, description=item_form.description.data, status=item_form.status.data)
+        try:
+            db.session.add(item)
+            db.session.flush()
+            item.order = float(item.id)
+            db.session.add(item)
+            db.session.commit()
+            flash(item.name.title() + ' added')
+        except:
+            db.session.rollback()
+            flash(item.name.title() + ' could not be added', 'error')
+    return redirect(url_for('items'))
+
+
+@app.route('/new-item-category', methods=['POST'])
+@admin_required
+def new_item_category():
+    category_form = ItemCategoryForm()
+    if category_form.validate_on_submit():
+        category = ItemCategory(name=category_form.name.data.lower())
+        try:
+            db.session.add(category)
+            db.session.flush()
+            category.order = category.id
+            db.session.commit()
+            flash(category.name.title() + ' added')
+        except:
+            db.session.rollback()
+            flash(category.name.title() + ' could not be added', 'error')
+    return redirect(url_for('items'))
+
+
+@app.route('/edit-item/<int:id>', methods=['GET', 'POST'])
+@admin_required
+def edit_item(id):
+    form = ItemForm()
+    item = Item.query.get_or_404(id)
+    categories = ItemCategory.query.order_by(ItemCategory.order).distinct()
+    category_list = [(c.id, c.name.title()) for c in categories]
+    form.category_id.choices = category_list
+    if form.validate_on_submit():
+        if 'save' in request.form:
+            item.name=form.name.data.lower()
+            item.category_id=form.category_id.data
+            item.price=form.price.data
+            item.description=form.description.data
+            item.order=form.order.data
+            item.status=form.status.data
+
+            try:
+                db.session.add(item)
+                db.session.commit()
+                flash(item.name.title() + ' updated')
+            except:
+                db.session.rollback()
+                flash(item.name.title() + ' could not be updated', 'error')
+        elif 'delete' in request.form:
+            db.session.delete(item)
+            db.session.commit()
+            flash('Deleted ' + item.name.title())
+        else:
+            flash('Code error in POST request', 'error')
+        return redirect(url_for('items'))
+    elif request.method == "GET":
+        form.name.data=item.name
+        form.category_id.data=item.category_id
+        form.price.data=item.price
+        form.description.data=item.description
+        form.order.data=item.order
+        form.status.data=item.status
+
+    return render_template('edit-item.html', title="Edit item", form=form, item=item)
+
+
+@app.route('/edit-item-category/<int:id>', methods=['GET', 'POST'])
+@admin_required
+def edit_item_category(id):
+    form = ItemCategoryForm()
+    category = ItemCategory.query.get_or_404(id)
+    items = Item.query.filter_by(category_id=id)
+    if form.validate_on_submit():
+        if 'save' in request.form:
+            category.name=form.name.data.lower()
+            category.order=form.order.data
+            try:
+                db.session.add(category)
+                db.session.commit()
+                flash(category.name.title() + ' updated')
+            except:
+                db.session.rollback()
+                flash(category.name.title() + ' could not be updated', 'error')
+        elif 'delete' in request.form:
+            db.session.delete(category)
+            db.session.commit()
+            flash('Deleted ' + category.name.title())
+        else:
+            flash('Code error in POST request', 'error')
+        return redirect(url_for('items'))
+    elif request.method == "GET":
+        form.name.data=category.name
+        form.order.data=category.order
+    return render_template('edit-item-category.html', title="Edit item category", form=form, \
+        category=category, items=items)
+
+
+@app.route('/faqs', methods=['GET', 'POST'])
+@admin_required
+def faqs():
+    faq_form = FaqForm()
+    category_form = FaqCategoryForm()
+    faqs = Faq.query.order_by(Faq.order).all()
+    categories = FaqCategory.query.order_by(FaqCategory.order).distinct()
+    category_list = [(c.id, c.name.title()) for c in categories]
+    faq_form.category_id.choices = category_list
+
+    return render_template('faqs.html', title="FAQs", faq_form=faq_form, \
+        category_form=category_form, faqs=faqs, categories=categories)
+
+
+@app.route('/new-faq', methods=['POST'])
+@admin_required
+def new_faq():
+    faq_form = FaqForm()
+    categories = FaqCategory.query.order_by(FaqCategory.order).distinct()
+    category_list = [(c.id, c.name.title()) for c in categories]
+    faq_form.category_id.choices = category_list
+    if faq_form.category_id.data == 0:
+        flash('Please select a category', 'error')
+        return redirect(url_for('faqs'))
+    if faq_form.validate_on_submit():
+        faq = Faq(question=faq_form.question.data, answer=faq_form.answer.data, category_id=faq_form.category_id.data)
+        try:
+            db.session.add(faq)
+            db.session.flush()
+            faq.order = float(faq.id)
+            db.session.add(faq)
+            db.session.commit()
+            flash('FAQ added')
+        except:
+            db.session.rollback()
+            flash('FAQ could not be added', 'error')
+    return redirect(url_for('faqs'))
+
+
+@app.route('/new-faq-category', methods=['POST'])
+@admin_required
+def new_faq_category():
+    category_form = FaqCategoryForm()
+    if category_form.validate_on_submit():
+        category = FaqCategory(name=category_form.name.data.lower())
+        try:
+            db.session.add(category)
+            db.session.flush()
+            category.order = category.id
+            db.session.commit()
+            flash(category.name.title() + ' added')
+        except:
+            db.session.rollback()
+            flash(category.name.title() + ' could not be added', 'error')
+    return redirect(url_for('faqs'))
+
+
+@app.route('/edit-faq/<int:id>', methods=['GET', 'POST'])
+@admin_required
+def edit_faq(id):
+    form = FaqForm()
+    faq = Faq.query.get_or_404(id)
+    categories = FaqCategory.query.order_by(FaqCategory.order).distinct()
+    category_list = [(c.id, c.name.title()) for c in categories]
+    form.category_id.choices = category_list
+    if form.validate_on_submit():
+        if 'save' in request.form:
+            faq.question=form.question.data
+            faq.answer=form.answer.data
+            faq.category_id=form.category_id.data
+            faq.order=form.order.data
+
+            try:
+                db.session.add(faq)
+                db.session.commit()
+                flash('FAQ updated')
+            except:
+                db.session.rollback()
+                flash('FAQ could not be updated', 'error')
+        elif 'delete' in request.form:
+            db.session.delete(faq)
+            db.session.commit()
+            flash('Deleted FAQ')
+        else:
+            flash('Code error in POST request', 'error')
+        return redirect(url_for('faqs'))
+    elif request.method == "GET":
+        form.question.data=faq.question
+        form.answer.data=faq.answer
+        form.category_id.data=faq.category_id
+        form.order.data=faq.order
+
+    return render_template('edit-faq.html', title="Edit FAQ", form=form, faq=faq)
+
+
+@app.route('/edit-faq-category/<int:id>', methods=['GET', 'POST'])
+@admin_required
+def edit_faq_category(id):
+    form = FaqCategoryForm()
+    category = FaqCategory.query.get_or_404(id)
+    faqs = Faq.query.filter_by(category_id=id)
+    if form.validate_on_submit():
+        if 'save' in request.form:
+            category.name=form.name.data.lower()
+            category.order=form.order.data
+            try:
+                db.session.add(category)
+                db.session.commit()
+                flash(category.name.title() + ' updated')
+            except:
+                db.session.rollback()
+                flash(category.name.title() + ' could not be updated', 'error')
+        elif 'delete' in request.form:
+            db.session.delete(category)
+            db.session.commit()
+            flash('Deleted ' + category.name.title())
+        else:
+            flash('Code error in POST request', 'error')
+        return redirect(url_for('faqs'))
+    elif request.method == "GET":
+        form.name.data=category.name
+        form.order.data=category.order
+    return render_template('edit-faq-category.html', title="Edit FAQ category", form=form, \
+        category=category, faqs=faqs)
+
+
+@app.route('/edit-reviews', methods=['GET', 'POST'])
+@admin_required
+def edit_reviews():
+    form = ReviewForm()
+    reviews = Review.query.order_by(Review.order).all()
+
+    if form.validate_on_submit():
+        review = Review(name=form.name.data, message=form.message.data)
+        try:
+            db.session.add(review)
+            db.session.flush()
+            review.order = float(review.id)
+            db.session.add(review)
+            db.session.commit()
+            flash('Review added')
+        except:
+            db.session.rollback()
+            flash('Review could not be added', 'error')
+        return redirect(url_for('edit_reviews'))
+    return render_template('edit-reviews.html', title="Reviews", form=form, reviews=reviews)
+
+
+@app.route('/edit-review/<int:id>', methods=['GET', 'POST'])
+@admin_required
+def edit_review(id):
+    form = ReviewForm()
+    review = Review.query.get_or_404(id)
+
+    if form.validate_on_submit():
+        if 'save' in request.form:
+            review.name=form.name.data
+            review.message=form.message.data
+            review.order=form.order.data
+            try:
+                db.session.add(review)
+                db.session.commit()
+                flash('Review updated')
+            except:
+                db.session.rollback()
+                flash('Review could not be updated', 'error')
+        elif 'delete' in request.form:
+            db.session.delete(review)
+            db.session.commit()
+            flash('Deleted review')
+        else:
+            flash('Code error in POST request', 'error')
+        return redirect(url_for('edit_reviews'))
+    elif request.method == "GET":
+        form.name.data=review.name
+        form.message.data=review.message
+        form.order.data=review.order
+    return render_template('edit-review.html', title="Edit review", form=form, review=review)
 
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -134,9 +487,9 @@ def logout():
 @app.route('/start-page')
 def start_page():
     if current_user.is_admin:
-        return redirect(url_for('users'))
+        return redirect(url_for('admin'))
     else:
-        return redirect(url_for('home'))
+        return redirect(url_for('index'))
 
 
 @app.route('/verify-email/<token>', methods=['GET', 'POST'])

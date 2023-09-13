@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Edit FAQ category</h1>
+  <form method="post" >
+    {{ form.hidden_tag() }}
+    {{ form.name }}
+    <label for="order" class="mt-3">Reorder (Categories with lowest numbers are displayed first)</label>
+    {{ form.order }}
+    
+    <div class="row">
+      <div class="col-8">
+        {{ form.save }}
+      </div>
+      <div class="col-4">
+        <a class="btn alert w-100" data-bs-toggle="modal" 
+            data-bs-target="#delete-modal" data-text="delete">
+          Delete
+      </a>
+      </div>
+      <div class="col-12 text-center">
+        <a href="{{ url_for('faqs') }}" class="btn sm sec">
+          FAQ list
+        </a>
+      </div>
+    </div>
+
+    <div id="delete-modal" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="modal-header pb-0">
+                <h1 class="modal-title">Are you sure?</h1>
+              </div>
+            </div>              
+            <div class="modal-body">
+              {% if faqs.count() > 0 %}
+                <p>You are about to delete all of the items in this category:</p>
+                {% for i in faqs %}
+                  <ul>
+                    <li>{{ i.question.title() }}</li>
+                  </ul> 
+                {% endfor %}
+              {% endif %}
+              <button class="btn alert d-inline me-2" type="submit" name="delete">Delete {{ category.name.title() }}</button>
+              <a class="btn d-inline-block" data-bs-dismiss="modal">Cancel</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock content %}
