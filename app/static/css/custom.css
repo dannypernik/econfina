@@ -6736,9 +6736,6 @@ a.btn {
 }
 a.btn:hover {
   text-decoration: none;
-  background-color: #fc723c;
-  border-color: #fc723c;
-  color: white;
 }
 
 button, .btn, input[type=submit] {
@@ -6799,8 +6796,12 @@ button.alert:hover, .btn.alert:hover, input[type=submit].alert:hover {
   color: #fc723c;
   border-color: #fc723c;
   background-color: transparent;
-  font-weight: 400;
   width: fit-content;
+}
+.btn.sec:hover {
+  background-color: #fc723c;
+  border-color: #fc723c;
+  color: white;
 }
 
 input, textarea {
@@ -7017,6 +7018,14 @@ div.message a {
   padding-left: 15px;
 }
 
+.drawer__header {
+  background-color: #088ea2;
+  padding: 2.1rem;
+}
+
+.drawer__content {
+  background-color: #088ea2;
+}
 .drawer__content a {
   display: inline;
 }
@@ -7024,12 +7033,11 @@ div.message a {
 .menu-link {
   height: 60px;
   border-bottom: 1px solid white;
-  color: #088ea2;
+  color: white;
   transition: 0.3s;
 }
 .menu-link:hover {
   background-color: #fc723c;
-  border-color: #fc723c;
   color: white;
 }
 .menu-link p {
