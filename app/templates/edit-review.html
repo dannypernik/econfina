@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Edit review</h1>
+  <form method="post" >
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.name.label }}
+      {{ form.name }}
+    </p>
+    <p>
+      {{ form.message.label }}
+      {{ form.message }}
+    </p>
+
+    <label for="order">Reorder (Items with lowest numbers are displayed first)</label>
+    {{ form.order }}
+    
+    <div class="row">
+      <div class="col-8">
+        {{ form.save }}
+      </div>
+      <div class="col-4">
+        <a class="btn alert w-100" data-bs-toggle="modal" 
+            data-bs-target="#delete-modal" data-text="delete">
+          Delete
+      </a>
+      </div>
+      <div class="col-12 text-center">
+        <a href="{{ url_for('edit_reviews') }}" class="btn sm sec">
+          Reviews list
+        </a>
+      </div>
+
+    <div id="delete-modal" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="modal-header pb-0">
+                <h1 class="modal-title">Are you sure?</h1>
+              </div>
+            </div>
+            <div class="modal-body">
+              <button class="btn alert d-inline me-2" type="submit" name="delete">Delete {{ review.name }}'s review</button>
+              <a class="btn d-inline-block" data-bs-dismiss="modal">Cancel</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock content %}

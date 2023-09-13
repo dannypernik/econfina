@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Edit FAQ</h1>
+  <form method="post" >
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.question.label }}
+      {{ form.question }}
+    </p>
+    <p>
+      {{ form.answer.label }}
+      {{ form.answer }}
+    </p>
+    <p>
+      {{ form.category_id.label }}
+      {{ form.category_id }}
+    </p>
+
+    <label for="order">Reorder (FAQs with lowest numbers are displayed first)</label>
+    {{ form.order }}
+    
+    <div class="row">
+      <div class="col-8">
+        {{ form.save }}
+      </div>
+      <div class="col-4">
+        <a class="btn alert w-100" data-bs-toggle="modal" 
+            data-bs-target="#delete-modal" data-text="delete">
+          Delete
+      </a>
+      </div>
+      <div class="col-12 text-center">
+        <a href="{{ url_for('faqs') }}" class="btn sm sec">
+          FAQ list
+        </a>
+      </div>
+
+    <div id="delete-modal" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="modal-header pb-0">
+                <h1 class="modal-title">Are you sure?</h1>
+              </div>
+            </div>
+            <div class="modal-body">
+              <p>This will delete "{{ faq.question }}"</p>
+              <button class="btn alert d-inline me-2" type="submit" name="delete">Delete</button>
+              <a class="btn d-inline-block" data-bs-dismiss="modal">Cancel</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock content %}

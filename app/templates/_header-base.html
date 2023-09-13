@@ -44,9 +44,19 @@
         </div>
       </a>
       {% if current_user.is_admin %}
-        <a href="{{ url_for('users') }}">
+        <a href="{{ url_for('items') }}">
           <div class="menu-link">
-            <p>Users</p>
+            <p>Update items</p>
+          </div>
+        </a>
+        <a href="{{ url_for('faqs') }}">
+          <div class="menu-link">
+            <p>Update FAQs</p>
+          </div>
+        </a>
+        <a href="{{ url_for('reviews') }}">
+          <div class="menu-link">
+            <p>Update reviews</p>
           </div>
         </a>
       {% endif %}

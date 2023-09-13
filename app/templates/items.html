@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+  <div>
+    <button id="add-item" class="btn d-inline-block me-2 mt-0">Add item</button>
+    <button id="add-category" class="btn sec d-inline-block me-2 mt-0">Add category</button>
+  </div>
+
+  <form id="add-item-form" class="collapsed" action="{{ url_for('new_item') }}" method="post">
+    <h1 class="mb-3 me-3 d-inline-block">Add item</h1>
+    <a class="hide-form" href="#">Hide</a>
+    {{ item_form.hidden_tag() }}
+    {{ item_form.name }}
+    {{ item_form.description }}
+    {{ item_form.price }}
+    <p>
+      {{ item_form.category_id.label(class="ms-2") }}
+      {{ item_form.category_id(class="mt-2") }}
+    </p>
+    {{ item_form.status.label(class="ms-2") }}
+    {{ item_form.status }}
+    {{ item_form.order(class="d-none") }}
+    {{ item_form.save }}
+  </form>
+
+  <form id="add-category-form" class="collapsed" action="{{ url_for('new_item_category') }}" method="post">
+    <h1 class="mb-3 me-3 d-inline-block">Add category</h1>
+    <a class="hide-form" href="#">Hide</a>
+    {{ category_form.hidden_tag() }}
+    {{ category_form.name }}
+    {{ category_form.order(class="d-none") }}
+    {{ category_form.save }}
+  </form>
+
+
+  {% for c in categories %}
+    <h1 class="slide-toggle my-3">
+      <a href="{{ url_for('edit_item_category', id=c.id) }}" class="category-name">
+        {{ c.name }}
+      </a>
+    </h1>
+    <div id="{{ c.name.replace(' ','-') }}" class="item-list">
+      {% for i in items %}
+        {% if i.category_id == c.id %}
+          <div class="mb-2">
+            <a class="semibold" href="{{ url_for('edit_item', id=i.id) }}">
+              {{ i.name.title() }}
+            </a>: ${{ i.price }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+  <div class="text-center">
+    <a href="{{ url_for('admin') }}" class="btn sm sec">
+      Back to admin
+    </a>
+  </div>
+{% endblock content %}
+
+{% block end_scripts %}
+  <script>
+    const slideDown = element => element.style.height = `${element.scrollHeight}px`;
+    const slideUp = element => element.style.height = '0px';
+
+    document.getElementById("add-item").addEventListener("click", function () {
+      this.parentElement.classList.add('d-none');
+      slideDown(document.getElementById("add-item-form"));
+    });
+
+    const hideButtons = document.querySelectorAll(".hide-form")
+    hideButtons.forEach(e => {
+      e.addEventListener("click", function () {
+        slideUp(this.parentElement);
+        document.getElementById("add-item").parentElement.classList.remove('d-none');
+      })
+    });
+
+    document.getElementById('add-category').addEventListener('click', function() {
+      this.parentElement.classList.add('d-none');
+      slideDown(document.getElementById('add-category-form'));
+    })
+  </script>
+{% endblock end_scripts %}
