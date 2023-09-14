@@ -7,10 +7,12 @@ from app.forms import ContactForm, ItemForm, ItemCategoryForm, FaqForm, FaqCateg
 from flask_login import current_user, login_user, logout_user, login_required, login_url
 from app.models import User, Item, ItemCategory, Faq, FaqCategory, Review
 from werkzeug.urls import url_parse
+from werkzeug.utils import secure_filename
 from datetime import datetime
 from app.email import send_contact_email, send_verification_email, send_password_reset_email
 from functools import wraps
 import requests
+import imghdr
 
 @app.before_request
 def before_request():
@@ -54,6 +56,18 @@ def get_quote():
 message, author = get_quote()
 
 
+def validate_image(stream):
+    header = stream.read(512)
+    stream.seek(0)
+    format = imghdr.what(None, header)
+    if not format:
+        return None
+    return '.' + (format if format != 'jpeg' else 'jpg')
+
+
+app.config['IMAGE_EXTENSIONS'] = ['.jpg', '.png', '.svg']
+
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
@@ -81,9 +95,28 @@ def about():
     return render_template('about.html', title="About")
 
 
-@app.route('/reviews')
+@app.route('/reviews', methods=['GET', 'POST'])
 def reviews():
-    return render_template('reviews.html', title="Reviews")
+    form = ReviewForm()
+    reviews = Review.query.order_by(Review.order).all()
+
+    if form.validate_on_submit():
+        review = Review(message=form.message.data, name=form.name.data, is_approved=False)
+        email = form.email.data
+        try:
+            db.session.add(review)
+            db.session.flush()
+            review.order = float(review.id)
+            review.add(review)
+            review.commit()
+            email_check = send_review_approval_email(review, email)
+            if email_check == 200:
+                send_confirmation_email(email)
+            flash('Your review was emailed to the team for approval. Thank you!')
+        except:
+            flash('Email failed to send. Please copy your review and email to ' + admin_email + \
+                ': ' + review.message)
+    return render_template('reviews.html', title="Reviews", form=form, reviews=reviews)
 
 
 @app.route('/choose-your-vessel')
@@ -133,9 +166,13 @@ def new_item():
         flash('Please select a category', 'error')
         return redirect(url_for('items'))
     if item_form.validate_on_submit():
-        item = Item(name=item_form.name.data.lower(), category_id=item_form.category_id.data, \
-            price=item_form.price.data, description=item_form.description.data, status=item_form.status.data)
+        uploaded_file = request.files['image_path']
+        filename = secure_filename(uploaded_file.filename)
+        item = Item(name=item_form.name.data.lower(), category_id=item_form.category_id.data, price=item_form.price.data, \
+            image_path=filename, description=item_form.description.data, status=item_form.status.data)
+        
         try:
+            uploaded_file.save(os.path.join(app.root_path, 'static/img/items', filename))
             db.session.add(item)
             db.session.flush()
             item.order = float(item.id)
@@ -177,11 +214,20 @@ def edit_item(id):
     if form.validate_on_submit():
         if 'save' in request.form:
             item.name=form.name.data.lower()
-            item.category_id=form.category_id.data
-            item.price=form.price.data
             item.description=form.description.data
-            item.order=form.order.data
+            item.price=form.price.data
+            item.category_id=form.category_id.data
             item.status=form.status.data
+            item.order=form.order.data
+
+            uploaded_file = request.files['image_path']
+            filename = secure_filename(uploaded_file.filename)
+            if filename != '':
+                full_path = os.path.join(app.root_path, 'static/img/items', item.image_path)
+                if os.path.exists(full_path):
+                    os.remove(full_path)
+                uploaded_file.save(os.path.join(app.root_path, 'static/img/items', filename))
+                item.image_path = filename
 
             try:
                 db.session.add(item)
@@ -201,6 +247,7 @@ def edit_item(id):
         form.name.data=item.name
         form.category_id.data=item.category_id
         form.price.data=item.price
+        form.image_path.data=item.image_path
         form.description.data=item.description
         form.order.data=item.order
         form.status.data=item.status
