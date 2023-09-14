@@ -57,12 +57,13 @@ def load_user(id):
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True)
+    name = db.Column(db.String(64))
     price = db.Column(db.String(6))
     description = db.Column(db.String(1024))
     order = db.Column(db.Float())
     status = db.Column(db.String(16))
     category_id = db.Column(db.Integer, db.ForeignKey('item_category.id'))
+    image_path = db.Column(db.String(128))
 
     def __repr__(self):
         return '<Item {}>'.format(self.name)
@@ -105,6 +106,7 @@ class Review(db.Model):
     title = db.Column(db.String(128))
     message = db.Column(db.String(1024))
     order = db.Column(db.Float())
+    email = db.Column(db.String(64))
     is_approved = db.Column(db.Boolean)
 
     def __repr__(self):

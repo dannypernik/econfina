@@ -6,13 +6,14 @@
     <button id="add-category" class="btn sec d-inline-block me-2 mt-0">Add category</button>
   </div>
 
-  <form id="add-item-form" class="collapsed" action="{{ url_for('new_item') }}" method="post">
+  <form id="add-item-form" class="collapsed" action="{{ url_for('new_item') }}" method="post" enctype="multipart/form-data">
     <h1 class="mb-3 me-3 d-inline-block">Add item</h1>
     <a class="hide-form" href="#">Hide</a>
     {{ item_form.hidden_tag() }}
     {{ item_form.name }}
     {{ item_form.description }}
     {{ item_form.price }}
+    {{ item_form.image_path(accept="image/*") }}
     <p>
       {{ item_form.category_id.label(class="ms-2") }}
       {{ item_form.category_id(class="mt-2") }}

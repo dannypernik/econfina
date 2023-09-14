@@ -4,6 +4,7 @@ from wtforms import StringField, BooleanField, PasswordField, TextAreaField, \
 from wtforms.fields.html5 import DateField, EmailField
 from wtforms.validators import ValidationError, InputRequired, DataRequired, \
     Email, EqualTo, Length
+from flask_wtf.file import FileField, FileAllowed
 from app.models import User, Item, ItemCategory, Faq, FaqCategory, Review
 
 
@@ -31,11 +32,16 @@ class ItemForm(FlaskForm):
     price = StringField('Price', render_kw={'placeholder': 'Price'}, \
         validators=[InputRequired()])
     description = TextAreaField('Description', render_kw={'placeholder': 'Description'})
+    image_path = FileField('Update image',validators=[FileAllowed(['png', 'jpg', 'svg'], 'Please upload a PNG, JPG, or SVG image')])
     category_id = SelectField('Category', coerce=int)
     status = SelectField('Status', choices=[('active','Active'),('inactive','Inactive')])
     order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
         validators=(validators.Optional(),))
     save = SubmitField('Save')
+
+    def validate_image(self, image_path):
+        if image_path.errors:
+            raise ValidationError("Images only!")
 
 
 class ItemCategoryForm(FlaskForm):
@@ -47,11 +53,13 @@ class ItemCategoryForm(FlaskForm):
 
 
 class ReviewForm(FlaskForm):
-    message = TextAreaField('Share your experience', render_kw={'placeholder': 'Share your experience'})
+    message = TextAreaField('Share your experience', render_kw={'placeholder': 'What did you think?'})
     name = StringField('Your name (optional)', render_kw={'placeholder': 'Your name (optional)'})
     order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
         validators=(validators.Optional(),))
-    save = SubmitField('Save')
+    email = EmailField('Email', render_kw={'placeholder': 'Email (if you\'d like us to reach out)'})
+    is_approved = BooleanField('Approved')
+    save = SubmitField('Send review')
 
 
 class FaqForm(FlaskForm):

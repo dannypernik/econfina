@@ -2,7 +2,7 @@
 
 {% block content %}
   <h1>Edit item</h1>
-  <form method="post" >
+  <form method="post" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <p>
       {{ form.name.label }}
@@ -16,6 +16,13 @@
       {{ form.price.label }}
       {{ form.price }}
     </p>
+    <div class="d-flex">
+      <img src="{{ url_for('static', filename='img/items/') }}{{ item.image_path }}" class="item-img-sm">
+      <div class="mb-3 ms-md-2 flex-grow-1">
+        {{ form.image_path.label(class="ms-2") }}
+        {{ form.image_path(class="ms-2", accept="image/*") }}
+      </div>
+    </div>
     <p>
       {{ form.category_id.label }}
       {{ form.category_id }}
