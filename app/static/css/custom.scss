@@ -76,22 +76,24 @@ body {
 
 // Headings and text //
 
-p, h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 {
   margin-bottom: 2rem;
 }
 
 h1, .h1 {
   font-size: calc(2.3rem + 1vw);
-  font-weight: 700;
   margin-bottom: 3rem;
+  font-weight: 700;
 }
 
 h2, .h2 {
   font-size: calc(2.2rem + 0.5vw);
+  font-weight: 700;
 }
 
 h3, .h3 {
   font-size: calc(2rem + 0.5vw);
+  font-weight: 700;
 }
 
 h4, .h4 {
@@ -106,13 +108,16 @@ h6, .h6 {
   font-size: calc(1.4rem + 0.25vw);
 }
 
+p {
+  margin-bottom: 2rem;
+}
+
 // Links and buttons //
 
 a {
   display: inline-block;
   text-decoration: none;
   color: $secondary-color;
-  transition: background-color 0.2s ease-in-out;
 
   &:hover {
     @include underline-hover($hover-color);
@@ -221,7 +226,7 @@ input, textarea {
   color: $primary-color;
 
   &:focus {
-    border-bottom: 1px solid $primary-color;
+    border-bottom: 1px solid $secondary-color;
   }
 }
 
@@ -447,11 +452,24 @@ div.message {
 #menu-icon {
   height: 26px;
   padding-left: 15px;
+  cursor: pointer;
 }
 
 .drawer__header {
   background-color: $primary-color;
-  padding: 2.1rem;
+  padding: 0.65rem 2rem;
+}
+
+.menu-close {
+  color: white;
+  font-size: 3.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    color: $secondary-color;
+  }
 }
 
 .drawer__content {
@@ -461,6 +479,7 @@ div.message {
     display: inline;
   }
 }
+
 
 .menu-link {
   height: 60px;
@@ -607,7 +626,7 @@ div.message {
 
 .home-next {
   display: table;
-  margin: calc(2rem + 1vw) auto 3rem;
+  margin: calc(1rem + 1vw) auto 3rem;
   text-align: center;
 
   &:hover {
@@ -698,10 +717,18 @@ div.message {
 
 .collapsed {
   height: 0px;
-  transition: height 0.25s ease-out;
+  transition: height 0.3s ease-out;
   overflow: hidden;
 }
 
 .category-name {
   text-transform: capitalize;
+}
+
+.item-img-sm {
+  max-width: 33%;
+  width: auto;
+  height: fit-content;
+  max-height: 10rem;
+  margin-bottom: 2rem;
 }

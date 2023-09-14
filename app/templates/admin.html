@@ -2,7 +2,7 @@
 
 {% block content %}
   <div class="row">
-    <div class="col-8 col-md-10">
+    <div class="col col-md-10">
       <h1>Admin actions</h1>
       <a href="{{ url_for('items') }}" class="btn d-block">Update Items</a>
       <a href="{{ url_for('faqs') }}" class="btn d-block">Update FAQs</a>
@@ -10,9 +10,9 @@
     </div>
   </div>
   <div class="row justify-content-center">
-    <div class="col text-end">
-      <h3 class="mb-1 mt-4">{{ message }}</h3>
-      <p>{{ author }}</p>
+    <div class="col offset-md-2 col-md-10 col-xl-8 text-end">
+      <h3 class="mb-2 mt-4">{{ message }}</h3>
+      <h4>{{ author }}</h4>
     </div>
   </div>
 {% endblock content %}
