@@ -43,11 +43,16 @@
             {% endif %}
           {% endwith %}
 
-          {% if form %}
-            {% for field, errors in form.errors.items() %}
-              <div class="message error">{{ errors[0] }}</div>
-            {% endfor %}
-          {% endif %}
+          {% block form_errors %}
+            {% if form %}
+              {% for field, errors in form.errors.items() %}
+                {% for e in errors %}
+                  <div class="message error">{{ e }}</div>
+                {% endfor %}
+              {% endfor %}
+            {% endif %}
+          {% endblock form_errors %}
+            
         {% endblock alerts %}
       {% endblock navbar %}
 

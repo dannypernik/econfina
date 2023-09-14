@@ -33,7 +33,7 @@
       <div class="drawer__title">
 
       </div>
-      <div class="drawer__close" data-drawer-close aria-label="Close Drawer"></div>
+      <div class="menu-close" data-drawer-close aria-label="Close Drawer">&times;</div>
     </div>
     <div class="drawer__content">
       {% block home_link %}
@@ -54,7 +54,7 @@
             <p>Update FAQs</p>
           </div>
         </a>
-        <a href="{{ url_for('reviews') }}">
+        <a href="{{ url_for('edit_reviews') }}">
           <div class="menu-link">
             <p>Update reviews</p>
           </div>
@@ -64,6 +64,12 @@
       <a href="{{ url_for('about') }}">
         <div class="menu-link">
           <p>About</p>
+        </div>
+      </a>
+
+      <a href="{{ url_for('reviews') }}">
+        <div class="menu-link">
+          <p>Reviews</p>
         </div>
       </a>
       

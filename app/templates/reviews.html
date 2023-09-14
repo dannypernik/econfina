@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+  <h1>Reviews</h1>
+  <div class="row">
+    <div class="col col-md-10 col-xl-8">
+      {% for i in reviews %}
+        <p>
+          <i>"{{ i.message }}"</i><br>
+          &ndash; {{ i.name }}
+        </p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <h3 class="mt-4">Share your experience</h3>
+  <form action="" method="post">
+    {{ form.hidden_tag() }}
+    <div class="row g-0">
+      <div class="col-12">
+        {{ form.message }}
+      </div>
+      <div class="col-12 col-md-5 pe-1 mb-1">
+        {{ form.name }}
+      </div>
+      <div class="col-12 col-md-7 ps-1 mb-1">
+        {{ form.email }}
+      </div>
+    </div>
+    {{ form.order(class="d-none") }}
+    {{ form.is_approved(class="d-none") }}
+    {{ form.save }}
+  </form>
+{% endblock content %}

@@ -12,7 +12,6 @@ from datetime import datetime
 from app.email import send_contact_email, send_verification_email, send_password_reset_email
 from functools import wraps
 import requests
-import imghdr
 
 @app.before_request
 def before_request():
@@ -54,18 +53,6 @@ def get_quote():
     return message, author
 
 message, author = get_quote()
-
-
-def validate_image(stream):
-    header = stream.read(512)
-    stream.seek(0)
-    format = imghdr.what(None, header)
-    if not format:
-        return None
-    return '.' + (format if format != 'jpeg' else 'jpg')
-
-
-app.config['IMAGE_EXTENSIONS'] = ['.jpg', '.png', '.svg']
 
 
 @app.route('/', methods=['GET', 'POST'])
