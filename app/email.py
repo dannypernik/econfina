@@ -7,7 +7,7 @@ import datetime
 from dateutil.parser import parse
 
 
-def send_contact_email(user, message):
+def send_contact_email(user, message, subject):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -16,14 +16,16 @@ def send_contact_email(user, message):
         'Messages': [
             {
                 "From": {
+                    "Name": app.config['MAIL_NAME'],
                     "Email": app.config['MAIL_USERNAME'],
                 },
                 "To": [
                     {
-                    "Email": app.config['MAIL_USERNAME']
+                        "Name": app.config['MAIL_NAME'],
+                        "Email": app.config['MAIL_USERNAME']
                     }
                 ],
-                "Subject": "Message from " + user.first_name,
+                "Subject": subject + " from " + user.first_name,
                 "ReplyTo": { "Email": user.email },
                 "HTMLPart": render_template('email/contact-email.html',
                                          user=user, message=message)
@@ -34,14 +36,13 @@ def send_contact_email(user, message):
     result = mailjet.send.create(data=data)
 
     if result.status_code == 200:
-        send_confirmation_email(user, message)
         print("Contact email sent from " + user.email)
     else:
         print("Contact email from " + user.email + " failed with code " + result.status_code)
     return result.status_code
 
 
-def send_confirmation_email(user, message):
+def send_confirmation_email(user, message, subject):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -50,6 +51,7 @@ def send_confirmation_email(user, message):
         'Messages': [
             {
                 "From": {
+                    "Name": app.config['MAIL_NAME'],
                     "Email": app.config['MAIL_USERNAME'],
                 },
                 "To": [
@@ -59,7 +61,9 @@ def send_confirmation_email(user, message):
                 ],
                 "Subject": "Confirmation email",
                 "HTMLPart": render_template('email/confirmation-email.html',
-                                         user=user, message=message)
+                                         user=user, message=message, subject=subject),
+                "TextPart": render_template('email/confirmation-email.txt',
+                                         user=user, message=message, subject=subject)
             }
         ]
     }
@@ -69,6 +73,40 @@ def send_confirmation_email(user, message):
         print("Confirmation email sent to " + user.email)
     else:
         print("Confirmation email to " + user.email + " failed to send with code " + result.status_code, result.reason)
+    return result.status_code
+
+
+def send_review_approval_email(review):
+    api_key = app.config['MAILJET_KEY']
+    api_secret = app.config['MAILJET_SECRET']
+    mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+
+    data = {
+        'Messages': [
+            {
+                "From": {
+                    "Name": app.config['MAIL_NAME'],
+                    "Email": app.config['MAIL_USERNAME'],
+                },
+                "To": [
+                    {
+                        "Name": app.config['MAIL_NAME'],
+                        "Email": app.config['MAIL_USERNAME']
+                    }
+                ],
+                "Subject": "New review from " + review.name,
+                "HTMLPart": render_template('email/review-approval-email.html',
+                                            review=review)
+            }
+        ]
+    }
+
+    result = mailjet.send.create(data=data)
+
+    if result.status_code == 200:
+        print("Review email sent")
+    else:
+        print("Review email failed with code " + result.status_code)
     return result.status_code
 
 
@@ -83,6 +121,7 @@ def send_verification_email(user):
         'Messages': [
             {
                 "From": {
+                    "Name": app.config['MAIL_NAME'],
                     "Email": app.config['MAIL_USERNAME'],
                 },
                 "To": [
@@ -121,6 +160,7 @@ def send_password_reset_email(user):
         'Messages': [
             {
                 "From": {
+                    "Name": app.config['MAIL_NAME'],
                     "Email": app.config['MAIL_USERNAME'],
                 },
                 "To": [

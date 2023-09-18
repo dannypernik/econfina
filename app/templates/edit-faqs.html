@@ -1,4 +1,19 @@
 {% extends 'base.html' %}
+
+{% block alerts %}
+  {{ super() }}
+  {% for field, errors in category_form.errors.items() %}
+    {% for e in errors %}
+      <div class="message error">{{ e }}</div>
+    {% endfor %}
+  {% endfor %}
+
+
+  
+
+
+  
+{% endblock alerts %}
  
 {% block content %}
   <div>
@@ -9,15 +24,15 @@
   <form id="add-faq-form" class="collapsed" action="{{ url_for('new_faq') }}" method="post">
     <h1 class="mb-3 me-3 d-inline-block">Add FAQ</h1>
     <a class="hide-form" href="#">Hide</a>
-    {{  faq_form.hidden_tag() }}
-    {{  faq_form.question }}
-    {{  faq_form.answer }}
+    {{  form.hidden_tag() }}
+    {{  form.question }}
+    {{  form.answer }}
     <p>
-      {{  faq_form.category_id.label(class="ms-2") }}
-      {{  faq_form.category_id(class="mt-2") }}
+      {{  form.category_id.label(class="ms-2") }}
+      {{  form.category_id(class="mt-2") }}
     </p>
-    {{  faq_form.order(class="d-none") }}
-    {{  faq_form.save }}
+    {{  form.order(class="d-none") }}
+    {{  form.save }}
   </form>
 
   <form id="add-category-form" class="collapsed" action="{{ url_for('new_faq_category') }}" method="post">
@@ -33,7 +48,7 @@
   {% for c in categories %}
     <h1 class="slide-toggle my-3">
       <a href="{{ url_for('edit_faq_category', id=c.id) }}" class="category-name">
-        {{ c.name }}
+        {{ c.name.title() }}
       </a>
     </h1>
     <div id="{{ c.name.replace(' ','-') }}" class="faq-list">
@@ -41,9 +56,9 @@
         {% if i.category_id == c.id %}
           <div class="mb-2">
             <a class="semibold" href="{{ url_for('edit_faq', id=i.id) }}">
-              {{ i.question }}
+              {{ i.question|safe }}
             </a><br>
-            {{ i.answer }}
+            {{ i.answer|safe }}
           </div>
         {% endif %}
       {% endfor %}

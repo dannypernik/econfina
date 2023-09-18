@@ -15,14 +15,23 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
+
+    <div id="weather-container">
+      <div id="weather-tab">Weather Forecast</div>
+      <!-- <a class="weatherwidget-io" href="https://forecast7.com/en/30d37n85d44/youngstown/" data-mode="Forecast" data-theme="pure" data-accent="#fafafa" data-highcolor="#fc723c" data-lowcolor="#088ea2" data-suncolor="#fc723c" data-raincolor="#088ea2" ></a> -->
+      <a class="weatherwidget-io" href="https://forecast7.com/en/30d37n85d44/youngstown/" data-label_1="Econfina Creek Weather" data-mode="Forecast" data-theme="sky" data-basecolor="#0596ac" data-accent="#088ea2" data-highcolor="#ffa011" data-lowcolor="#90f8f3" data-suncolor="#ffa011" data-cloudfill="" data-raincolor="#90f8f3" ></a>
+    </div>
     <nav class="row justify-content-center g-0">
       <div class="col-11 col-md-10">
-        <div class="row justify-content-center justify-content-md-end">
+        <div class="row justify-content-center">
           <!-- <div id="vid-toggle">
             <div id="pause-play"></div>
           </div> -->
+          <div class="col col-md-5 col-lg-6 col-xl-7">
+            <img id="home-logo" class="img-fluid" src="{{ url_for('static', filename='img/logo.png') }}" alt="">
+          </div>
           <div class="home-nav col col-md-7 col-lg-6 col-xl-5">
-            <div><a href="#home" data-text="home">home</a></div>
+            <div><a href="#vessels" data-text="book now">book now</a></div>
             <div><a href="{{ url_for('about') }}" data-text="about">about</a></div>
             <div><a href="#contact" data-text="contact">contact</a></div>
           </div>
@@ -32,8 +41,6 @@
 
     <div class="row justify-content-center">
       <div class="col-11 col-md-8">
-        <img id="home-logo" class="img-fluid"
-          src="{{ url_for('static', filename='img/log.svg') }}" alt="">
         <h1 id="home-title">Canoe Econfina!</h1>
         <h3>
           <!-- Come paddle down Econfina Creek and soak in the serenity of
@@ -43,7 +50,7 @@
     </div>
     <div class="row justify-content-center">
       <div class="col col-sm-11">
-        <a href="#home-3" class="btn">
+        <a href="#vessels" class="btn">
           Choose your Vessel
         </a>
 
@@ -83,14 +90,14 @@
         
 
         <div class="text-center">
-          <a class="btn mb-2" href="#contact">
-            Get in touch
+          <a class="btn mb-2" href="{{ url_for('faq') }}">
+            Frequently asked questions
           </a>
         </div>
         <div class="home-next">
-          <a href="#home-3">
+          <a href="#vessels">
             <h4>
-              Section 3
+              Paddle with us
             </h4>
             <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -118,10 +125,25 @@
     </div>
   </div>
 
-  <div id="home-3" class="home-section inverse">
-    <div class="row justify-content-center">
-      <div class="col-11 col-sm-10 col-lg-8">
-        <h1 class="mb-4">Section 3 title</h1>
+  <div id="vessels" class="home-section inverse">
+    <div class="mt-4 row justify-content-center">
+      <div class="col-10 col-md-11 col-lg-10">
+        <div class="row justify-content-center">
+          <h1 class="mb-5">Choose your vessel</h1>
+            
+          {% for i in vessels %}
+              <div class="mb-4 col-12 col-md-6">
+                <div class="item-img-div">
+                  <a href="{{ url_for('vessel_selected', id=i.booqable_id) }}">
+                    <img class="img-fluid m-auto m-md-0 align-self-center" src="{{ url_for('static', filename='img/items') }}/{{ i.image_path }}">
+                  </a>           
+                </div>
+                <h3 class="mb-0 me-2 text-center text-md-start d-inline-block">{{ i.name }}</h3>
+                <span>{{ i.description }}</span>
+                <p class="text-center text-md-start">${{ i.price }}</p>
+              </div>
+          {% endfor %}
+        </div>
         <div class="home-next">
           <a href="#contact">
             <h4>
@@ -144,7 +166,7 @@
 
         <form id="inquiry-form" action="" method="post">
           {{ form.hidden_tag() }}
-          <p class="mb-3">{{ form.first_name }}</p>
+          <p class="mb-3">{{ form.name }}</p>
           <p class="mb-3">{{ form.email }}</p>
           <p class="mb-3">{{ form.phone }}</p>
           <div class="d-md-flex">
@@ -159,3 +181,11 @@
     </div>
   </div>
 {% endblock container %}
+
+{% block end_scripts %}
+  {{ super() }}
+  
+  <script>
+    document.onload(!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'));
+  </script>
+{% endblock end_scripts %}

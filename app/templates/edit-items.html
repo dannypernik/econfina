@@ -1,4 +1,13 @@
 {% extends 'base.html' %}
+
+{% block alerts %}
+  {{ super() }}
+  {% for field, errors in category_form.errors.items() %}
+    {% for e in errors %}
+      <div class="message error">{{ e }}</div>
+    {% endfor %}
+  {% endfor %}
+{% endblock alerts %}
  
 {% block content %}
   <div>
@@ -9,19 +18,32 @@
   <form id="add-item-form" class="collapsed" action="{{ url_for('new_item') }}" method="post" enctype="multipart/form-data">
     <h1 class="mb-3 me-3 d-inline-block">Add item</h1>
     <a class="hide-form" href="#">Hide</a>
-    {{ item_form.hidden_tag() }}
-    {{ item_form.name }}
-    {{ item_form.description }}
-    {{ item_form.price }}
-    {{ item_form.image_path(accept="image/*") }}
+    {{ form.hidden_tag() }}
+    {{ form.name }}
+    {{ form.description }}
+    {{ form.price }}
+    <div class="row mt-1 g-0">
+      <div class="col-12 col-md-6">
+        {{ form.booqable_id }}
+      </div>
+      <div class="ps-2 col-12 col-md-6">
+        <span class="text-sm">
+          Booqable ID can be found by hovering over "Visible" button next to product on
+          <a href="https://econfina-creek-canoe-rentals-llc.booqable.com/product_groups" target="_blank">
+            this page
+          </a>.
+        </span>
+      </div>
+    </div>
+    {{ form.image_path(accept="image/*") }}
     <p>
-      {{ item_form.category_id.label(class="ms-2") }}
-      {{ item_form.category_id(class="mt-2") }}
+      {{ form.category_id.label(class="ms-2") }}
+      {{ form.category_id(class="mt-2") }}
     </p>
-    {{ item_form.status.label(class="ms-2") }}
-    {{ item_form.status }}
-    {{ item_form.order(class="d-none") }}
-    {{ item_form.save }}
+    {{ form.status.label(class="ms-2") }}
+    {{ form.status }}
+    {{ form.order(class="d-none") }}
+    {{ form.save }}
   </form>
 
   <form id="add-category-form" class="collapsed" action="{{ url_for('new_item_category') }}" method="post">
@@ -45,7 +67,7 @@
         {% if i.category_id == c.id %}
           <div class="mb-2">
             <a class="semibold" href="{{ url_for('edit_item', id=i.id) }}">
-              {{ i.name.title() }}
+              {{ i.name.title() }} {{ i.description }}
             </a>: ${{ i.price }}
           </div>
         {% endif %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+  <div class="row g-0">
+    <div class="col-6 col-md-9">
+      <h1 class="d-none d-md-block">Frequently asked questions</h1>
+      <h1 class="d-block d-md-none">FAQs</h1>
+    </div>
+
+    <div class="col-6 col-md-3 text-end">
+      <a href="{{ url_for('choose_your_vessel') }}" class="btn sm mt-0">Book now</a>
+    </div>
+  </div>
+  
+
+  {% for c in categories %}
+    {% for f in faqs %}
+      <h4 class="mb-0"><strong>{{ f.question|safe }}</strong></h4>
+      <p>{{ f.answer|safe }}</p>
+    {% endfor %}
+  {% endfor %}
+
+  <h4 class="mt-5">Ask another question</h4>
+  <form action="" method="post">
+    {{ form.hidden_tag() }}
+    <div class="row g-0">
+      <div class="col-12">
+        {{ form.first_name }}
+      </div>
+      <div class="col-12 col-md-6 pe-md-1 my-2">
+        {{ form.email }}
+      </div>
+      <div class="col-12 col-md-6 ps-md-1 my-2">
+        {{ form.phone }}
+      </div>
+    </div>
+    <div class="d-md-flex">
+      {{ form.message(rows='4', class="flex-grow-1") }}
+      <div class="mb-3 mt-md-5 ms-md-2">
+        {{ hcaptcha }}
+      </div>
+    </div>
+    {{ form.submit }}
+  </form>
+{% endblock content %}

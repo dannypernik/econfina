@@ -43,15 +43,13 @@
             {% endif %}
           {% endwith %}
 
-          {% block form_errors %}
-            {% if form %}
-              {% for field, errors in form.errors.items() %}
-                {% for e in errors %}
-                  <div class="message error">{{ e }}</div>
-                {% endfor %}
+          {% if form %}
+            {% for field, errors in form.errors.items() %}
+              {% for e in errors %}
+                <div class="message error">{{ field }}: {{ e }}</div>
               {% endfor %}
-            {% endif %}
-          {% endblock form_errors %}
+            {% endfor %}
+          {% endif %}
             
         {% endblock alerts %}
       {% endblock navbar %}
@@ -91,7 +89,7 @@
                 </svg>
               </td>
               <td>
-                <a class="white" href="tel:"></a>
+                <a class="white" href="tel:+18506010157">(850) 601-0157</a>
               </td>
             </tr>
             <tr>
@@ -115,7 +113,7 @@
               </td>
               <td>
                 <script>document.write(new Date().getFullYear())</script>
-                
+                Econfina Creek Canoe Rentals 
               </td>
             </tr>
             <tr class="d-md-none">

@@ -15,7 +15,6 @@ $primary-color: #088ea2;
 $secondary-color: #fc723c;//58bba4;
 $highlight-color: #0f2d2f;//e97435;
 $hover-color: lighten($primary-color, 10%);
-$message-color: #004085;
 $alert-color: #850017;
 
 @import "../scss/bootstrap-reboot.scss";
@@ -26,6 +25,7 @@ $alert-color: #850017;
 @import "../scss/_modal.scss";
 @import "../scss/_close.scss";
 @import "../scss/_tables.scss";
+@import "../scss/_transitions.scss";
 
 @import "menu.css";
 
@@ -78,22 +78,20 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 2rem;
+  font-weight: 700;
 }
 
 h1, .h1 {
-  font-size: calc(2.3rem + 1vw);
+  font-size: calc(2.5rem + 1vw);
   margin-bottom: 3rem;
-  font-weight: 700;
 }
 
 h2, .h2 {
-  font-size: calc(2.2rem + 0.5vw);
-  font-weight: 700;
+  font-size: calc(2.25rem + 0.5vw);
 }
 
 h3, .h3 {
   font-size: calc(2rem + 0.5vw);
-  font-weight: 700;
 }
 
 h4, .h4 {
@@ -110,6 +108,10 @@ h6, .h6 {
 
 p {
   margin-bottom: 2rem;
+}
+
+.text-sm {
+  font-size: 1.4rem;
 }
 
 // Links and buttons //
@@ -205,7 +207,6 @@ button, .btn, input[type="submit"] {
   color: $secondary-color;
   border-color: $secondary-color;
   background-color: transparent;
-  //font-weight: 400;
   width: fit-content;
 
   &:hover {
@@ -382,6 +383,7 @@ select {
 
 .img-fluid {
   max-width: 100%;
+  max-height: 100%;
   height: auto;
 }
 
@@ -391,14 +393,14 @@ div.message {
   width: 100%;
   font-size: 1.5rem;
   margin-bottom: 0;
-  color: $message-color;
-  background-color: lighten($message-color, 90%);
-  border-color: lighten($message-color, 90%);
+  color: $logo-color-4;
+  background-color: lighten($logo-color-4, 75%);
+  border-color: lighten($logo-color-4, 75%);
 
   &.error {
     color: $alert-color;
-    background-color: lighten($alert-color, 95%);
-    border-color: lighten($alert-color, 95%);
+    background-color: lighten($alert-color, 70%);
+    border-color: lighten($alert-color, 70%);
   }
 
   a {
@@ -514,13 +516,11 @@ div.message {
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/bg.webp) center center no-repeat;
 }
 
-#home-3 {
-  //background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-  //url(../img/bg.webp) center center no-repeat;
-  background-color: #0f2d2f;
+#vessels {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/bg.webp) center bottom no-repeat;
 }
 
-#home-1, #home-3 {
+#home-1, #vessels {
   background-attachment: fixed;
   background-size: cover;
   min-height: 100vh;
@@ -529,7 +529,7 @@ div.message {
 
 // Mobile backgrounds //
 @media screen and (max-width: 575px) {
-  #home-1, #home-3 {
+  #home-1, #vessels {
     background-attachment: scroll;
   }
 }
@@ -537,11 +537,12 @@ div.message {
 #home-logo {
   position: relative;
   display: block;
-  margin: 3rem auto;
-  height: calc(80px + 3vw);
+  margin: 3rem;
+  height: calc(8rem + 3vw);
 }
 
 #home-title {
+  margin-top: 10rem;
   font-family: 'Rock Salt', 'Montserrat', Arial, Helvetica, sans-serif;
   font-size: calc(1.8rem + 3vw);
 }
@@ -566,7 +567,7 @@ div.message {
     color: white;
     font-size: 2rem;
     text-decoration: none;
-    padding: calc(3rem + 2vw) 0;
+    padding: calc(5rem + 2vw) 0;
     text-transform: uppercase;;
 
     &:hover, &:focus {
@@ -624,10 +625,44 @@ div.message {
   }
 }
 
+#weather-container {
+  position:fixed;
+  right: -220px;
+  bottom: 0;
+  transition: right 0.3s;
+
+  &:hover {
+    right: 0;
+  }
+  
+}
+
+.weatherwidget-io {
+  width: 220px;
+  border-radius: 10px;
+  border: 1px solid white;
+}
+
+#weather-tab {
+  position: fixed;
+  bottom: 111px;
+  right: -74px;
+  background-color: #1b8db4;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border: 1px solid white;
+  transform: rotate(-90deg);
+  padding: 0.5rem 1rem;
+}
+
 .home-next {
   display: table;
   margin: calc(1rem + 1vw) auto 3rem;
   text-align: center;
+
+  h4 {
+    font-weight: 400;
+  }
 
   &:hover {
     a {
@@ -695,6 +730,15 @@ div.message {
   }
 }
 
+// Items
+
+.item-img-div {
+  display: flex;
+  height: 75%;
+  padding: 3rem;
+  margin-bottom: 2rem;
+}
+
 // About page //
 
 .profile-img {
@@ -719,10 +763,6 @@ div.message {
   height: 0px;
   transition: height 0.3s ease-out;
   overflow: hidden;
-}
-
-.category-name {
-  text-transform: capitalize;
 }
 
 .item-img-sm {

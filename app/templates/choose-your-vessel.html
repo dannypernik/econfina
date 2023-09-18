@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+ 
+{% block container %}
+  <div class="title-margin row justify-content-center">
+    <div class="col-10 col-md-11 col-lg-10">
+      <div class="row justify-content-center">
+        <h1 class="mb-5">Choose your vessel</h1>
+          
+        {% for i in vessels %}
+          <div class="mb-4 col-12 col-md-6">
+            <div class="item-img-div">
+              <a href="{{ url_for('vessel_selected', id=i.booqable_id) }}">
+                <img class="img-fluid m-auto m-md-0 align-self-center" src="{{ url_for('static', filename='img/items') }}/{{ i.image_path }}">
+              </a>           
+            </div>
+            <h3 class="mb-0 me-2 text-center text-md-start d-inline-block">{{ i.name }}</h3>
+            <span>{{ i.description }}</span>
+            <p class="text-center text-md-start">${{ i.price }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div id="video-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen p-5">
+      <div class="modal-content">
+        <div class="container-fluid">
+          <div class="modal-header pb-0">
+            <h1 class="mt-4">Schedule your pickup time</h1>
+            <span type="button" class="btn-close" data-bs-dismiss="modal">×</span>
+          </div>
+          <div class="modal-body pt-0">
+            <p>Select a time that you will pick up your vessel from our check-in office at
+              5641 Porter Pond Road in Youngstown, Florida. You can keep your vessel until 5:30 PM,
+              which is when our last shuttle of the day can pick you up at the end of your journey.
+              Please refer to our <a href="{{ url_for('faq') }}">FAQ</a> section if you have any
+              questions, or call us / message us at (850) 601-0157. Thank you :)</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock container %}

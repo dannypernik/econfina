@@ -6654,6 +6654,43 @@ progress {
     -webkit-overflow-scrolling: touch;
   }
 }
+.fade {
+  transition: opacity 0.15s linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fade {
+    transition: none;
+  }
+}
+.fade:not(.show) {
+  opacity: 0;
+}
+
+.collapse:not(.show) {
+  display: none;
+}
+
+.collapsing {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.35s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .collapsing {
+    transition: none;
+  }
+}
+.collapsing.collapse-horizontal {
+  width: 0;
+  height: auto;
+  transition: width 0.35s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .collapsing.collapse-horizontal {
+    transition: none;
+  }
+}
+
 html {
   height: 100%;
   scroll-padding-top: 60px;
@@ -6684,22 +6721,20 @@ body::-webkit-scrollbar {
 
 h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
   margin-bottom: 2rem;
+  font-weight: 700;
 }
 
 h1, .h1 {
-  font-size: calc(2.3rem + 1vw);
+  font-size: calc(2.5rem + 1vw);
   margin-bottom: 3rem;
-  font-weight: 700;
 }
 
 h2, .h2 {
-  font-size: calc(2.2rem + 0.5vw);
-  font-weight: 700;
+  font-size: calc(2.25rem + 0.5vw);
 }
 
 h3, .h3 {
   font-size: calc(2rem + 0.5vw);
-  font-weight: 700;
 }
 
 h4, .h4 {
@@ -6716,6 +6751,10 @@ h6, .h6 {
 
 p {
   margin-bottom: 2rem;
+}
+
+.text-sm {
+  font-size: 1.4rem;
 }
 
 a {
@@ -6955,6 +6994,7 @@ select {
 
 .img-fluid {
   max-width: 100%;
+  max-height: 100%;
   height: auto;
 }
 
@@ -6964,14 +7004,14 @@ div.message {
   width: 100%;
   font-size: 1.5rem;
   margin-bottom: 0;
-  color: #004085;
-  background-color: white;
-  border-color: white;
+  color: #0f2d2f;
+  background-color: #cdedef;
+  border-color: #cdedef;
 }
 div.message.error {
   color: #850017;
-  background-color: white;
-  border-color: white;
+  background-color: #ffebee;
+  border-color: #ffebee;
 }
 div.message a {
   text-decoration: underline;
@@ -7076,11 +7116,11 @@ div.message a {
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/bg.webp) center center no-repeat;
 }
 
-#home-3 {
-  background-color: #0f2d2f;
+#vessels {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/bg.webp) center bottom no-repeat;
 }
 
-#home-1, #home-3 {
+#home-1, #vessels {
   background-attachment: fixed;
   background-size: cover;
   min-height: 100vh;
@@ -7088,18 +7128,19 @@ div.message a {
 }
 
 @media screen and (max-width: 575px) {
-  #home-1, #home-3 {
+  #home-1, #vessels {
     background-attachment: scroll;
   }
 }
 #home-logo {
   position: relative;
   display: block;
-  margin: 3rem auto;
-  height: calc(80px + 3vw);
+  margin: 3rem;
+  height: calc(8rem + 3vw);
 }
 
 #home-title {
+  margin-top: 10rem;
   font-family: "Rock Salt", "Montserrat", Arial, Helvetica, sans-serif;
   font-size: calc(1.8rem + 3vw);
 }
@@ -7123,7 +7164,7 @@ div.message a {
   color: white;
   font-size: 2rem;
   text-decoration: none;
-  padding: calc(3rem + 2vw) 0;
+  padding: calc(5rem + 2vw) 0;
   text-transform: uppercase;
 }
 .home-nav a:hover, .home-nav a:focus {
@@ -7174,10 +7215,41 @@ div.message a {
   min-height: calc(100vh - 30rem);
 }
 
+#weather-container {
+  position: fixed;
+  right: -220px;
+  bottom: 0;
+  transition: right 0.3s;
+}
+#weather-container:hover {
+  right: 0;
+}
+
+.weatherwidget-io {
+  width: 220px;
+  border-radius: 10px;
+  border: 1px solid white;
+}
+
+#weather-tab {
+  position: fixed;
+  bottom: 111px;
+  right: -74px;
+  background-color: #1b8db4;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border: 1px solid white;
+  transform: rotate(-90deg);
+  padding: 0.5rem 1rem;
+}
+
 .home-next {
   display: table;
   margin: calc(1rem + 1vw) auto 3rem;
   text-align: center;
+}
+.home-next h4, .home-next .h4 {
+  font-weight: 400;
 }
 .home-next:hover a {
   text-decoration: none;
@@ -7238,6 +7310,13 @@ div.message a {
   color: #fc723c;
 }
 
+.item-img-div {
+  display: flex;
+  height: 75%;
+  padding: 3rem;
+  margin-bottom: 2rem;
+}
+
 .profile-img {
   display: block;
   border-radius: 100%;
@@ -7257,10 +7336,6 @@ div.message a {
   height: 0px;
   transition: height 0.3s ease-out;
   overflow: hidden;
-}
-
-.category-name {
-  text-transform: capitalize;
 }
 
 .item-img-sm {
