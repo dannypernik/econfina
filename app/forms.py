@@ -20,7 +20,6 @@ class ContactForm(FlaskForm):
     email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     phone = StringField('Phone number (optional)', render_kw={"placeholder": "Phone number (optional)"})
-    subject = StringField('Subject', render_kw={'placeholder': 'Subject'}, default='Message')
     message = TextAreaField('Message', render_kw={"placeholder": "Message"}, \
         validators=[InputRequired()])
     submit = SubmitField('Submit')
@@ -32,11 +31,14 @@ class ItemForm(FlaskForm):
     price = StringField('Price', render_kw={'placeholder': 'Price'}, \
         validators=[InputRequired()])
     description = TextAreaField('Description', render_kw={'placeholder': 'Description'})
-    image_path = FileField('Update image',validators=[FileAllowed(['png', 'jpg', 'svg'], 'Please upload a PNG, JPG, or SVG image')])
+    image_path = FileField('Update image',validators=[FileAllowed(['jpg', 'jpeg', 'png', 'webp'], \
+        'Please upload a .jpg, .png, or .webp image')])
     category_id = SelectField('Category', coerce=int)
     status = SelectField('Status', choices=[('active','Active'),('inactive','Inactive')])
     order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
         validators=(validators.Optional(),))
+    booqable_id = StringField('Booqable ID', render_kw={'placeholder': 'Booqable ID'}, \
+        validators=[InputRequired()])
     save = SubmitField('Save')
 
     def validate_image(self, image_path):
@@ -53,18 +55,19 @@ class ItemCategoryForm(FlaskForm):
 
 
 class ReviewForm(FlaskForm):
-    message = TextAreaField('Share your experience', render_kw={'placeholder': 'What did you think?'})
-    name = StringField('Your name (optional)', render_kw={'placeholder': 'Your name (optional)'})
+    message = TextAreaField('Share your experience', render_kw={'placeholder': 'What did you think?'}, \
+        validators=[InputRequired()])
+    name = StringField('Name', render_kw={'placeholder': 'Name'})
     order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
         validators=(validators.Optional(),))
-    email = EmailField('Email', render_kw={'placeholder': 'Email (if you\'d like us to reach out)'})
+    email = EmailField('Email', render_kw={'placeholder': 'Email'}, validators=[InputRequired()])
     is_approved = BooleanField('Approved')
     save = SubmitField('Send review')
 
 
 class FaqForm(FlaskForm):
     question = TextAreaField('Question', render_kw={'placeholder': 'Question'})
-    answer = StringField('Answer', render_kw={'placeholder': 'Answer'})
+    answer = TextAreaField('Answer', render_kw={'placeholder': 'Answer'})
     category_id = SelectField('Category', coerce=int)
     order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
         validators=(validators.Optional(),))

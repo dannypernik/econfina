@@ -5,20 +5,27 @@
   <form method="post" >
     {{ form.hidden_tag() }}
     <p>
+      {{ form.message.label }}
+      {{ form.message }}
+    </p>
+    <p>
       {{ form.name.label }}
       {{ form.name }}
     </p>
     <p>
-      {{ form.message.label }}
-      {{ form.message }}
+      {{ form.email.label }}
+      {{ form.email }}
     </p>
-
+    <p>
+      {{ form.is_approved }}
+      {{ form.is_approved.label }}
+    </p>
     <label for="order">Reorder (Items with lowest numbers are displayed first)</label>
     {{ form.order }}
     
     <div class="row">
       <div class="col-8">
-        {{ form.save }}
+        {{ form.save(value="Save") }}
       </div>
       <div class="col-4">
         <a class="btn alert w-100" data-bs-toggle="modal" 

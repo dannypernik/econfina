@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-9">
         {% block logo_link %}
-          <a href="{{ url_for('index', _anchor='#contact') }}">
+          <a href="{{ url_for('index') }}">
         {% endblock logo_link %}
           <img id="nav-img" src="{{ url_for('static', filename='img/logo.svg') }}">
         </a>
@@ -38,18 +38,19 @@
     <div class="drawer__content">
       {% block home_link %}
         <a href="{{ url_for('index') }}">
-      {% endblock home_link %}
-        <div class="menu-link">
-          <p>Home</p>
-        </div>
-      </a>
+          <div class="menu-link">
+            <p>Home</p>
+          </div>
+        </a>
+      {% endblock %}
+
       {% if current_user.is_admin %}
-        <a href="{{ url_for('items') }}">
+        <a href="{{ url_for('edit_items') }}">
           <div class="menu-link">
             <p>Update items</p>
           </div>
         </a>
-        <a href="{{ url_for('faqs') }}">
+        <a href="{{ url_for('edit_faqs') }}">
           <div class="menu-link">
             <p>Update FAQs</p>
           </div>
@@ -59,11 +60,22 @@
             <p>Update reviews</p>
           </div>
         </a>
+        <a href="{{ url_for('signup') }}">
+          <div class="menu-link">
+            <p>Create admin</p>
+          </div>
+        </a>
       {% endif %}
-      
-      <a href="{{ url_for('about') }}">
+
+      <a href="{{ url_for('choose_your_vessel') }}">
         <div class="menu-link">
-          <p>About</p>
+          <p>Book now</p>
+        </div>
+      </a>
+      
+      <a href="{{ url_for('faq') }}">
+        <div class="menu-link">
+          <p>FAQ</p>
         </div>
       </a>
 
@@ -88,9 +100,9 @@
           </div>
         </a>
       {% else %}
-        <a href="{{ url_for('signin') }}">
+        <a href="{{ url_for('login') }}">
           <div class="menu-link">
-            <p>Sign in</p>
+            <p>Admin login</p>
           </div>
         </a>
       {% endif %}

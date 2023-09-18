@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
  
 {% block content %}
-  <h1>Reviews</h1>
+  <div class="row g-0">
+    <div class="col-6 col-md-9">
+      <h1>Reviews</h1>
+    </div>
+
+    <div class="col-6 col-md-3 text-end">
+      <a href="{{ url_for('choose_your_vessel') }}" class="btn sm mt-0">Book now</a>
+    </div>
+  </div>
+
   <div class="row">
-    <div class="col col-md-10 col-xl-8">
+    <div class="col col-md-10">
       {% for i in reviews %}
         <p>
           <i>"{{ i.message }}"</i><br>
@@ -20,10 +29,10 @@
       <div class="col-12">
         {{ form.message }}
       </div>
-      <div class="col-12 col-md-5 pe-1 mb-1">
+      <div class="col-12 col-md-6 pe-1 mt-2">
         {{ form.name }}
       </div>
-      <div class="col-12 col-md-7 ps-1 mb-1">
+      <div class="col-12 col-md-6 ps-1 mt-2">
         {{ form.email }}
       </div>
     </div>

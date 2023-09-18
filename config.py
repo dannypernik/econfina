@@ -12,12 +12,12 @@ class Config(object):
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = int(os.environ.get('MAIL_PORT') or 25)
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
+    MAIL_NAME = os.environ.get('MAIL_NAME')
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     HCAPTCHA_SITE_KEY = os.environ.get('HCAPTCHA_SITE_KEY')
     HCAPTCHA_SECRET_KEY = os.environ.get('HCAPTCHA_SECRET_KEY')
     MAILJET_KEY = os.environ.get('MAILJET_KEY')
     MAILJET_SECRET = os.environ.get('MAILJET_SECRET')
-    ADMINS = [os.environ.get('ADMINS')]
-    HELLO_EMAIL = os.environ.get('HELLO_EMAIL')
+    ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
     PHONE = os.environ.get('PHONE')

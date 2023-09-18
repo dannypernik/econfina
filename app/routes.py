@@ -9,7 +9,8 @@ from app.models import User, Item, ItemCategory, Faq, FaqCategory, Review
 from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from app.email import send_contact_email, send_verification_email, send_password_reset_email
+from app.email import send_contact_email, send_verification_email, send_password_reset_email, \
+    send_confirmation_email, send_review_approval_email
 from functools import wraps
 import requests
 
@@ -37,7 +38,7 @@ def admin_required(f):
         else:
             flash('You must have administrator privileges to access this page.', 'error')
             logout_user()
-            return redirect(login_url('signin', next_url=request.url))
+            return redirect(login_url('login', next_url=request.url))
     return wrap
 
 
@@ -54,11 +55,16 @@ def get_quote():
 
 message, author = get_quote()
 
+admin_email = app.config['ADMIN_EMAIL']
+
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = ContactForm()
+    vessels = Item.query.filter_by(category_id=1)
+    categories = ItemCategory.query.order_by(ItemCategory.order).all()
+    booqable_id = request.args.get('id', None)
     if form.validate_on_submit():
         if hcaptcha.verify():
             pass
@@ -67,14 +73,16 @@ def index():
             return redirect(url_for('index'))
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
-        subject = form.subject.data
-        email_status = send_contact_email(user, message)
+        subject = 'message'
+        email_status = send_contact_email(user, message, subject.title())
         if email_status == 200:
+            send_confirmation_email(user, message, subject)
             flash('Please check ' + user.email + ' for a confirmation email. Thank you for reaching out!')
             return redirect(url_for('index', _anchor="home"))
         else:
-            flash('Email failed to send, please contact ' + hello, 'error')
-    return render_template('index.html', form=form)
+            flash('Email failed to send, please contact ' + admin_email + \
+                ' and paste your message: ' + message, 'error')
+    return render_template('index.html', form=form, vessels=vessels, categories=categories, booqable_id=booqable_id)
 
 
 @app.route('/about')
@@ -85,35 +93,67 @@ def about():
 @app.route('/reviews', methods=['GET', 'POST'])
 def reviews():
     form = ReviewForm()
-    reviews = Review.query.order_by(Review.order).all()
+    reviews = Review.query.filter_by(is_approved=True).order_by(Review.order)
 
     if form.validate_on_submit():
-        review = Review(message=form.message.data, name=form.name.data, is_approved=False)
-        email = form.email.data
+        review = Review(message=form.message.data, name=form.name.data, email=form.email.data, \
+            is_approved=False)
+        user = User(first_name=form.name.data, email=form.email.data)
+        subject='review'
         try:
             db.session.add(review)
             db.session.flush()
             review.order = float(review.id)
-            review.add(review)
-            review.commit()
-            email_check = send_review_approval_email(review, email)
-            if email_check == 200:
-                send_confirmation_email(email)
-            flash('Your review was emailed to the team for approval. Thank you!')
+            db.session.add(review)
+            db.session.commit()
         except:
             flash('Email failed to send. Please copy your review and email to ' + admin_email + \
-                ': ' + review.message)
+                ': ' + review.message, 'error')
+            return redirect(url_for('reviews'))
+        email_check = send_review_approval_email(review)
+        if email_check == 200:
+            send_confirmation_email(user, review.message, subject)
+            flash('Your review was emailed to the team. Thank you!')
+            return redirect(url_for('index'))
     return render_template('reviews.html', title="Reviews", form=form, reviews=reviews)
 
 
 @app.route('/choose-your-vessel')
 def choose_your_vessel():
-    return render_template('choose-your-vessel.html', title="Choose Your Vessel")
+    vessels = Item.query.filter_by(category_id=1)
+    return render_template('choose-your-vessel.html', title="Choose Your Vessel", vessels=vessels)
 
 
-@app.route('/faq')
+@app.route('/vessel-selected')
+def vessel_selected():
+    booqable_id = request.args.get('id', None)
+    sale_items = Item.query.filter(Item.booqable_id != booqable_id).order_by(Item.order)
+    return render_template('vessel-selected.html', title="Pickup time", booqable_id=booqable_id, sale_items=sale_items)
+
+
+@app.route('/faq', methods=['GET', 'POST'])
 def faq():
-    return render_template('faq.html', title="FAQ")
+    form = ContactForm()
+    faqs = Faq.query.order_by(Faq.order).all()
+    categories = FaqCategory.query.order_by(FaqCategory.order).distinct()
+    if form.validate_on_submit():
+        if hcaptcha.verify():
+            pass
+        else:
+            flash('A computer has questioned your humanity. Please try again.', 'error')
+            return redirect(url_for('index'))
+        user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
+        message = form.message.data
+        subject = 'question'
+        email_status = send_contact_email(user, message, subject.title())
+        if email_status == 200:
+            send_confirmation_email(user, message, subject)
+            flash('Please check ' + user.email + ' for a confirmation email. Thank you for reaching out!')
+            return redirect(url_for('index', _anchor="home"))
+        else:
+            flash('Email failed to send, please contact ' + admin_email + \
+                ' and paste your message: ' + message, 'error')
+    return render_template('faq.html', title="FAQ", form=form, faqs=faqs, categories=categories)
 
 
 @app.route('/landing-page')
@@ -128,38 +168,41 @@ def admin():
     return render_template('admin.html', title="Admin", message=message, author=author)
 
 
-@app.route('/items', methods=['GET', 'POST'])
+@app.route('/edit-items', methods=['GET', 'POST'])
 @admin_required
-def items():
-    item_form = ItemForm()
+def edit_items():
+    form = ItemForm()
     category_form = ItemCategoryForm()
     items = Item.query.order_by(Item.order).all()
     categories = ItemCategory.query.order_by(ItemCategory.order).distinct()
     category_list = [(c.id, c.name.title()) for c in categories]
-    item_form.category_id.choices = category_list
+    form.category_id.choices = category_list
 
-    return render_template('items.html', title="Menu items", item_form=item_form, \
+    return render_template('edit-items.html', title="Menu items", form=form, \
         category_form=category_form, items=items, categories=categories)
 
 
 @app.route('/new-item', methods=['POST'])
 @admin_required
 def new_item():
-    item_form = ItemForm()
+    form = ItemForm(request.form)
     categories = ItemCategory.query.order_by(ItemCategory.order).distinct()
     category_list = [(c.id, c.name.title()) for c in categories]
-    item_form.category_id.choices = category_list
-    if item_form.category_id.data == 0:
+    form.category_id.choices = category_list
+    if form.category_id.data == 0:
         flash('Please select a category', 'error')
-        return redirect(url_for('items'))
-    if item_form.validate_on_submit():
+        return redirect(url_for('edit_items'))
+    if form.validate_on_submit():
+        item = Item(name=form.name.data.lower(), category_id=form.category_id.data, price=form.price.data, \
+            description=form.description.data, status=form.status.data, booqable_id=form.booqable_id.data)
+
         uploaded_file = request.files['image_path']
         filename = secure_filename(uploaded_file.filename)
-        item = Item(name=item_form.name.data.lower(), category_id=item_form.category_id.data, price=item_form.price.data, \
-            image_path=filename, description=item_form.description.data, status=item_form.status.data)
+        if filename != '':
+            uploaded_file.save(os.path.join(app.root_path, 'static/img/items', filename))
+            item.image_path = filename
         
         try:
-            uploaded_file.save(os.path.join(app.root_path, 'static/img/items', filename))
             db.session.add(item)
             db.session.flush()
             item.order = float(item.id)
@@ -169,7 +212,7 @@ def new_item():
         except:
             db.session.rollback()
             flash(item.name.title() + ' could not be added', 'error')
-    return redirect(url_for('items'))
+    return redirect(url_for('edit_items'))
 
 
 @app.route('/new-item-category', methods=['POST'])
@@ -177,7 +220,7 @@ def new_item():
 def new_item_category():
     category_form = ItemCategoryForm()
     if category_form.validate_on_submit():
-        category = ItemCategory(name=category_form.name.data.lower())
+        category = ItemCategory(name=category_form.name.data)
         try:
             db.session.add(category)
             db.session.flush()
@@ -187,7 +230,7 @@ def new_item_category():
         except:
             db.session.rollback()
             flash(category.name.title() + ' could not be added', 'error')
-    return redirect(url_for('items'))
+    return redirect(url_for('edit_items'))
 
 
 @app.route('/edit-item/<int:id>', methods=['GET', 'POST'])
@@ -206,6 +249,7 @@ def edit_item(id):
             item.category_id=form.category_id.data
             item.status=form.status.data
             item.order=form.order.data
+            item.booqable_id=form.booqable_id.data
 
             uploaded_file = request.files['image_path']
             filename = secure_filename(uploaded_file.filename)
@@ -229,7 +273,7 @@ def edit_item(id):
             flash('Deleted ' + item.name.title())
         else:
             flash('Code error in POST request', 'error')
-        return redirect(url_for('items'))
+        return redirect(url_for('edit_items'))
     elif request.method == "GET":
         form.name.data=item.name
         form.category_id.data=item.category_id
@@ -238,6 +282,7 @@ def edit_item(id):
         form.description.data=item.description
         form.order.data=item.order
         form.status.data=item.status
+        form.booqable_id.data=item.booqable_id
 
     return render_template('edit-item.html', title="Edit item", form=form, item=item)
 
@@ -250,7 +295,7 @@ def edit_item_category(id):
     items = Item.query.filter_by(category_id=id)
     if form.validate_on_submit():
         if 'save' in request.form:
-            category.name=form.name.data.lower()
+            category.name=form.name.data
             category.order=form.order.data
             try:
                 db.session.add(category)
@@ -265,7 +310,7 @@ def edit_item_category(id):
             flash('Deleted ' + category.name.title())
         else:
             flash('Code error in POST request', 'error')
-        return redirect(url_for('items'))
+        return redirect(url_for('edit_items'))
     elif request.method == "GET":
         form.name.data=category.name
         form.order.data=category.order
@@ -273,32 +318,32 @@ def edit_item_category(id):
         category=category, items=items)
 
 
-@app.route('/faqs', methods=['GET', 'POST'])
+@app.route('/edit-faqs', methods=['GET', 'POST'])
 @admin_required
-def faqs():
-    faq_form = FaqForm()
+def edit_faqs():
+    form = FaqForm()
     category_form = FaqCategoryForm()
     faqs = Faq.query.order_by(Faq.order).all()
     categories = FaqCategory.query.order_by(FaqCategory.order).distinct()
     category_list = [(c.id, c.name.title()) for c in categories]
-    faq_form.category_id.choices = category_list
+    form.category_id.choices = category_list
 
-    return render_template('faqs.html', title="FAQs", faq_form=faq_form, \
+    return render_template('edit-faqs.html', title="FAQs", form=form, \
         category_form=category_form, faqs=faqs, categories=categories)
 
 
 @app.route('/new-faq', methods=['POST'])
 @admin_required
 def new_faq():
-    faq_form = FaqForm()
+    form = FaqForm()
     categories = FaqCategory.query.order_by(FaqCategory.order).distinct()
     category_list = [(c.id, c.name.title()) for c in categories]
-    faq_form.category_id.choices = category_list
-    if faq_form.category_id.data == 0:
+    form.category_id.choices = category_list
+    if form.category_id.data == 0:
         flash('Please select a category', 'error')
-        return redirect(url_for('faqs'))
-    if faq_form.validate_on_submit():
-        faq = Faq(question=faq_form.question.data, answer=faq_form.answer.data, category_id=faq_form.category_id.data)
+        return redirect(url_for('edit_faqs'))
+    if form.validate_on_submit():
+        faq = Faq(question=form.question.data, answer=form.answer.data, category_id=form.category_id.data)
         try:
             db.session.add(faq)
             db.session.flush()
@@ -309,7 +354,7 @@ def new_faq():
         except:
             db.session.rollback()
             flash('FAQ could not be added', 'error')
-    return redirect(url_for('faqs'))
+    return redirect(url_for('edit_faqs'))
 
 
 @app.route('/new-faq-category', methods=['POST'])
@@ -327,7 +372,7 @@ def new_faq_category():
         except:
             db.session.rollback()
             flash(category.name.title() + ' could not be added', 'error')
-    return redirect(url_for('faqs'))
+    return redirect(url_for('edit_faqs'))
 
 
 @app.route('/edit-faq/<int:id>', methods=['GET', 'POST'])
@@ -358,7 +403,7 @@ def edit_faq(id):
             flash('Deleted FAQ')
         else:
             flash('Code error in POST request', 'error')
-        return redirect(url_for('faqs'))
+        return redirect(url_for('edit_faqs'))
     elif request.method == "GET":
         form.question.data=faq.question
         form.answer.data=faq.answer
@@ -391,7 +436,7 @@ def edit_faq_category(id):
             flash('Deleted ' + category.name.title())
         else:
             flash('Code error in POST request', 'error')
-        return redirect(url_for('faqs'))
+        return redirect(url_for('edit_faqs'))
     elif request.method == "GET":
         form.name.data=category.name
         form.order.data=category.order
@@ -403,10 +448,11 @@ def edit_faq_category(id):
 @admin_required
 def edit_reviews():
     form = ReviewForm()
-    reviews = Review.query.order_by(Review.order).all()
+    approved_reviews = Review.query.filter_by(is_approved=True).order_by(Review.order)
+    pending_reviews = Review.query.filter_by(is_approved=False).order_by(Review.order)
 
     if form.validate_on_submit():
-        review = Review(name=form.name.data, message=form.message.data)
+        review = Review(name=form.name.data, message=form.message.data, email=form.email.data)
         try:
             db.session.add(review)
             db.session.flush()
@@ -418,7 +464,8 @@ def edit_reviews():
             db.session.rollback()
             flash('Review could not be added', 'error')
         return redirect(url_for('edit_reviews'))
-    return render_template('edit-reviews.html', title="Reviews", form=form, reviews=reviews)
+    return render_template('edit-reviews.html', title="Reviews", form=form, \
+        approved_reviews=approved_reviews, pending_reviews=pending_reviews)
 
 
 @app.route('/edit-review/<int:id>', methods=['GET', 'POST'])
@@ -430,7 +477,9 @@ def edit_review(id):
     if form.validate_on_submit():
         if 'save' in request.form:
             review.name=form.name.data
+            review.email=form.email.data
             review.message=form.message.data
+            review.is_approved=form.is_approved.data
             review.order=form.order.data
             try:
                 db.session.add(review)
@@ -448,29 +497,21 @@ def edit_review(id):
         return redirect(url_for('edit_reviews'))
     elif request.method == "GET":
         form.name.data=review.name
+        form.email.data=review.email
         form.message.data=review.message
         form.order.data=review.order
+        form.is_approved.data=review.is_approved
     return render_template('edit-review.html', title="Edit review", form=form, review=review)
 
 
-@app.route('/signin', methods=['GET', 'POST'])
-def signin():
-    if current_user.is_authenticated:
-        flash('You are already signed in.')
-        return redirect(url_for('start_page'))
-    form = LoginForm()
-    signup_form = SignupForm()
-    return render_template('signin.html', title='Sign in', form=form, signup_form=signup_form)
-
-
 @app.route('/signup', methods=['GET', 'POST'])
+@admin_required
 def signup():
-    form = LoginForm()
-    signup_form = SignupForm()
-    if signup_form.validate_on_submit():
-        user = User(first_name=signup_form.first_name.data, last_name=signup_form.last_name.data, \
-        email=signup_form.email.data)
-        user.set_password(signup_form.password.data)
+    form = SignupForm()
+    if form.validate_on_submit():
+        user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
+        email=form.email.data)
+        user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
         email_status = send_verification_email(user)
@@ -478,44 +519,40 @@ def signup():
         if email_status == 200:
             flash("Welcome! Please check your inbox to verify your email.")
         else:
-            flash('Verification email failed to send, please contact ' + hello, 'error')
-        next = request.args.get('next')
-        if not next or url_parse(next).netloc != '':
-            return redirect(url_for('start_page'))
-        return redirect(next)
-    return render_template('signin.html', title='Sign in', form=form, signup_form=signup_form)
+            flash('Verification email failed to send, please contact ' + admin_email, 'error')
+    return render_template('signup.html', title='Sign up', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    form = LoginForm()
     if current_user.is_authenticated:
         flash('You are already signed in.')
         return redirect(url_for('start_page'))
-    form = LoginForm()
-    signup_form = SignupForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('signin'))
+            flash('Invalid username or password', 'error')
+            return redirect(url_for('login'))
         login_user(user)
         if user.is_verified != True:
             email_status = send_verification_email(user)
             if email_status == 200:
                 flash('Please check your inbox to verify your email.')
             else:
-                flash('Verification email did not send. Please contact ' + hello)
-        next = request.args.get('next')
-        if not next or url_parse(next).netloc != '':
+                flash('Verification email did not send. Please contact ' + admin_email, 'error')
+        next_page = request.args.get('next')
+        print('next:', next_page)
+        if not next_page or url_parse(next_page).netloc != '':
             return redirect(url_for('start_page'))
-        return redirect(next)
-    return render_template('signin.html', title='Sign in', form=form, signup_form=signup_form)
+        return redirect(next_page)
+    return render_template('login.html', title='Log in', form=form)
 
 
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('signin'))
+    return redirect(url_for('login'))
 
 
 @app.route('/start-page')
@@ -539,7 +576,7 @@ def verify_email(token):
         return redirect(url_for('start_page'))
     else:
         flash('Your verification link is expired or invalid. Log in to receive a new link.')
-        return redirect(url_for('signin'))
+        return redirect(url_for('login'))
 
 
 @app.route('/request-password-reset', methods=['GET', 'POST'])
@@ -557,10 +594,10 @@ def request_password_reset():
             if email_status == 200:
                 flash('Check your email for instructions to reset your password.')
             else:
-                flash('Email failed to send, please contact ' + hello, 'error')
+                flash('Email failed to send, please contact ' + admin_email, 'error')
         else:
             flash('Check your email for instructions to reset your password')
-        return redirect(url_for('signin'))
+        return redirect(url_for('login'))
     return render_template('request-password-reset.html', title='Reset password', form=form)
 
 
