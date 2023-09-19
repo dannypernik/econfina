@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div>
+    <button id="add-user" class="btn d-inline-block me-2 mt-0">+ Add user</button>
+  </div>
+
+  <form id="add-user-form" class="collapsed" action="" method="post">
+    <h1 class="mb-3 me-3 d-inline-block">Add user</h1>
+    <a class="hide-form" href="#">Hide</a>
+
+    {{ form.hidden_tag() }}
+    {{ form.first_name }}
+    {{ form.last_name }}
+    {{ form.email }}
+    {{ form.is_admin }}
+    {{ form.is_admin.label(class="mt-2 ms-2") }}
+  
+    {{ form.submit(class="mb-3") }}
+  </form>
+
+  <h2 class="mb-1 mt-4">Admins</h2>
+  {% for a in admins %}
+    <div>
+      <a href="{{ url_for('edit_user', id=a.id) }}">
+        {{ a.first_name }} {{ a.last_name }}
+      </a>
+    </div>
+  {% endfor %}
+
+  <h2 class="mb-1 mt-4">Non-admins</h2>
+  {% for n in not_admins %}
+    <div>
+      <a href="{{ url_for('edit_user', id=n.id) }}">
+        {{ n.first_name }} {{ n.last_name }}
+      </a>
+    </div>
+  {% endfor %}
+
+  
+{% endblock content %}
+
+{% block end_scripts %}
+  <script>
+    const slideDown = element => element.style.height = `${element.scrollHeight}px`;
+    const slideUp = element => element.style.height = '0px';
+
+    document.getElementById("add-user").addEventListener("click", function () {
+      this.parentElement.classList.add('d-none');
+      slideDown(document.getElementById("add-user-form"));
+    });
+
+    const hideButtons = document.querySelectorAll(".hide-form")
+    hideButtons.forEach(e => {
+      e.addEventListener("click", function () {
+        slideUp(this.parentElement);
+        document.getElementById("add-user").parentElement.classList.remove('d-none');
+      })
+    });
+  </script>
+{% endblock end_scripts %}
