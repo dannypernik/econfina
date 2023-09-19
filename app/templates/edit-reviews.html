@@ -20,7 +20,7 @@
     <div class="col">
       {% for i in pending_reviews %}
         <div class="mb-2">
-          <a class="semibold" href="{{ url_for('edit_review', id=i.id) }}">
+          <a class="fw-semibold" href="{{ url_for('edit_review', id=i.id) }}">
             {{ i.name }}
           </a><br>
           {{ i.message }}
@@ -34,7 +34,7 @@
     <div class="col">
       {% for i in approved_reviews %}
         <div class="mb-2">
-          <a class="semibold" href="{{ url_for('edit_review', id=i.id) }}">
+          <a class="fw-semibold" href="{{ url_for('edit_review', id=i.id) }}">
             {{ i.name }}
           </a><br>
           {{ i.message }}

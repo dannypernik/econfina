@@ -55,7 +55,7 @@
       {% for i in faqs %}
         {% if i.category_id == c.id %}
           <div class="mb-2">
-            <a class="semibold" href="{{ url_for('edit_faq', id=i.id) }}">
+            <a class="fw-semibold" href="{{ url_for('edit_faq', id=i.id) }}">
               {{ i.question|safe }}
             </a><br>
             {{ i.answer|safe }}
