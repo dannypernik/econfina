@@ -2,7 +2,7 @@
 
 {% block content %}
   <div>
-    <button id="add-user" class="btn d-inline-block me-2 mt-0">+ Add user</button>
+    <button id="add-user" class="btn d-inline-block me-2 my-0">+ Add user</button>
   </div>
 
   <form id="add-user-form" class="collapsed" action="" method="post">
@@ -15,7 +15,6 @@
     {{ form.email }}
     {{ form.is_admin }}
     {{ form.is_admin.label(class="mt-2 ms-2") }}
-  
     {{ form.submit(class="mb-3") }}
   </form>
 
@@ -36,8 +35,6 @@
       </a>
     </div>
   {% endfor %}
-
-  
 {% endblock content %}
 
 {% block end_scripts %}
