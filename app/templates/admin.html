@@ -7,12 +7,13 @@
       <a href="{{ url_for('edit_items') }}" class="btn d-block">Update Items</a>
       <a href="{{ url_for('edit_faqs') }}" class="btn d-block">Update FAQs</a>
       <a href="{{ url_for('edit_reviews') }}" class="btn d-block">Update Reviews</a>
+      <a href="{{ url_for('edit_users') }}" class="btn d-block">Update Admins</a>
     </div>
   </div>
   <div class="row justify-content-center">
     <div class="col offset-md-2 col-md-10 col-xl-8 text-end">
       <h3 class="mb-2 mt-4">{{ message }}</h3>
-      <h4>{{ author }}</h4>
+      <h4 class="fw-normal">{{ author }}</h4>
     </div>
   </div>
 {% endblock content %}

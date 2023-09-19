@@ -3,7 +3,7 @@ from flask import Flask, render_template, flash, Markup, redirect, url_for, \
     request, send_from_directory, send_file, make_response
 from app import app, db, login, hcaptcha
 from app.forms import ContactForm, ItemForm, ItemCategoryForm, FaqForm, FaqCategoryForm, ReviewForm, \
-    EmailListForm, SignupForm, LoginForm, UserForm, RequestPasswordResetForm, ResetPasswordForm
+    EmailListForm, LoginForm, UserForm, RequestPasswordResetForm, ResetPasswordForm
 from flask_login import current_user, login_user, logout_user, login_required, login_url
 from app.models import User, Item, ItemCategory, Faq, FaqCategory, Review
 from werkzeug.urls import url_parse
@@ -504,25 +504,6 @@ def edit_review(id):
     return render_template('edit-review.html', title="Edit review", form=form, review=review)
 
 
-@app.route('/signup', methods=['GET', 'POST'])
-@admin_required
-def signup():
-    form = SignupForm()
-    if form.validate_on_submit():
-        user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
-        email=form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        email_status = send_verification_email(user)
-        login_user(user)
-        if email_status == 200:
-            flash("Welcome! Please check your inbox to verify your email.")
-        else:
-            flash('Verification email failed to send, please contact ' + admin_email, 'error')
-    return render_template('signup.html', title='Sign up', form=form)
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -572,6 +553,9 @@ def verify_email(token):
         user.is_verified = True
         db.session.add(user)
         db.session.commit()
+        if not user.password_hash:
+            flash('Please choose a password to complete verification')
+            return redirect(url_for('set_password', token=token))
         flash('Thank you for verifying your account.')
         return redirect(url_for('start_page'))
     else:
@@ -618,29 +602,15 @@ def set_password(token):
     return render_template('set-password.html', form=form)
 
 
-@app.route('/users', methods=['GET', 'POST'])
+@app.route('/edit-users', methods=['GET', 'POST'])
 @admin_required
-def users():
+def edit_users():
     form = UserForm(None)
-    roles = ['parent', 'student', 'admin']
-    active_users = User.query.order_by(User.first_name).filter((User.status == 'active'))
-    other_users = User.query.order_by(User.first_name).filter((User.status != 'active') | (User.status == None) | \
-        (User.role.notin_(roles)) | (User.role == None))
-    parents = User.query.filter_by(role='parent')
-    parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
-    form.parent_id.choices = parent_list
+    admins = User.query.filter_by(is_admin=True)
+    not_admins = User.query.filter_by(is_admin=False)
     if form.validate_on_submit():
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
-            email=form.email.data, phone=form.phone.data, location=form.location.data, \
-            role=form.role.data, is_admin=False)
-        if form.status.data == 'none':
-            user.status=None
-        else:
-            user.status=form.status.data
-        if form.parent_id.data == 0:
-            user.parent_id=None
-        else:
-            user.parent_id=form.parent_id.data
+            email=form.email.data, is_admin=form.is_admin.data)
         try:
             db.session.add(user)
             db.session.commit()
@@ -648,10 +618,13 @@ def users():
         except:
             db.session.rollback()
             flash(user.first_name + ' could not be added', 'error')
-            return redirect(url_for('users'))
-        return redirect(url_for('users'))
-    return render_template('users.html', title="Users", form=form, active_users=active_users, \
-        other_users=other_users, roles=roles)
+            return redirect(url_for('edit_users'))
+        email_status = send_verification_email(user)
+        if email_status == 200:
+            flash("Verification email sent to " + user.email)
+        else:
+            flash('Verification email failed to send', 'error')
+    return render_template('edit-users.html', title="Users", form=form, admins=admins, not_admins=not_admins)
 
 
 @app.route('/edit-user/<int:id>', methods=['GET', 'POST'])
@@ -659,23 +632,12 @@ def users():
 def edit_user(id):
     user = User.query.get_or_404(id)
     form = UserForm(user.email, obj=user)
-    parents = User.query.order_by(User.first_name).filter_by(role='parent')
-    parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
-    form.parent_id.choices = parent_list
     if form.validate_on_submit():
         if 'save' in request.form:
             user.first_name=form.first_name.data
             user.last_name=form.last_name.data
             user.email=form.email.data
-            user.phone=form.phone.data
-            user.location=form.location.data
-            user.status=form.status.data
-            user.role=form.role.data
             user.is_admin=form.is_admin.data
-            if form.parent_id.data == 0:
-                user.parent_id=None
-            else:
-                user.parent_id=form.parent_id.data
 
             try:
                 db.session.add(user)
@@ -684,23 +646,18 @@ def edit_user(id):
             except:
                 db.session.rollback()
                 flash(user.first_name + ' could not be updated', 'error')
-                return redirect(url_for('users'))
+                return redirect(url_for('edit_users'))
         elif 'delete' in request.form:
             db.session.delete(user)
             db.session.commit()
             flash('Deleted ' + user.first_name)
         else:
             flash('Code error in POST request', 'error')
-        return redirect(url_for('users'))
+        return redirect(url_for('edit_users'))
     elif request.method == "GET":
         form.first_name.data=user.first_name
         form.last_name.data=user.last_name
         form.email.data=user.email
-        form.phone.data=user.phone
-        form.location.data=user.location
-        form.status.data=user.status
-        form.role.data=user.role
-        form.parent_id.data=user.parent_id
         form.is_admin.data=user.is_admin
     return render_template('edit-user.html', title='Edit User', form=form, user=user)
 

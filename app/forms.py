@@ -91,21 +91,6 @@ class EmailListForm(FlaskForm):
     submit = SubmitField()
 
 
-class SignupForm(FlaskForm):
-    email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address"), \
-            validate_email])
-    first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
-        validators=[InputRequired()])
-    last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
-        validators=[InputRequired()])
-    password = PasswordField('Password', render_kw={"placeholder": "Password"}, \
-        validators=[InputRequired()])
-    password2 = PasswordField('Repeat Password', render_kw={"placeholder": "Repeat Password"}, \
-        validators=[InputRequired(), EqualTo('password',message="Passwords do not match.")])
-    submit = SubmitField('Sign up')
-
-
 class LoginForm(FlaskForm):
     email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
@@ -140,11 +125,6 @@ class UserForm(FlaskForm):
         validators=[InputRequired()])
     email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
-    phone = StringField('Phone', render_kw={"placeholder": "Phone"})
-    location = StringField('Location', render_kw={"placeholder": "Location"})
-    status = SelectField('Status', choices=[('none','None'),('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
-    role = SelectField('Role', choices=[('student', 'Student'),('parent', 'Parent'),('admin','Admin')])
-    parent_id = SelectField('Parent', coerce=int)
     is_admin = BooleanField('Admin')
     submit = SubmitField('Save')
 
