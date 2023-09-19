@@ -7328,10 +7328,6 @@ div.message a {
   color: white;
 }
 
-.semibold {
-  font-weight: 600;
-}
-
 .collapsed {
   height: 0px;
   transition: height 0.3s ease-out;
