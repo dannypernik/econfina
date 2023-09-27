@@ -543,9 +543,16 @@ def signup():
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
         email=form.email.data)
         user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("You are now registered. We're glad you're here!")
+        try:
+            db.session.add(user)
+            db.session.commit()
+            email_status = send_verification_email(user)
+            if email_status == 200:
+                flash('Welcome! Please check your inbox to verify your email.')
+            else:
+                flash('Verification email did not send. Please contact ' + admin_email, 'error')
+        except:
+            flash('Failed to create new user.', 'error')
         return redirect(url_for('index'))
     return render_template('signup.html', title='Sign up', form=form)
 
