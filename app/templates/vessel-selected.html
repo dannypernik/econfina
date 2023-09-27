@@ -10,18 +10,35 @@
       Please refer to our <a href="{{ url_for('faq') }}">FAQ</a> section if you have any
       questions, or call us / message us at (850) 601-0157.
     </p>
+    <div class="booqable-datepicker"></div>
     <div class="booqable-product-detail" data-id="{{ booqable_id }}"></div>
     
     <h2 class="mt-3 mb-1">Add to your order</h2>
     {% for i in sale_items %}
       <div class="booqable-product" data-id="{{ i.booqable_id }}"></div>
     {% endfor %}
-    <a href="{{ url_for('choose_your_vessel') }}" class="btn sec">Back</a>
+    <div class="row text-center">
+      <div class="col">
+        <a href="{{ url_for('choose_your_vessel') }}" class="btn sec mx-1">Back</a>
+        <a id="cart-link" class="btn mx-1">View cart</a>
+      </div>
+    </div>
   </div>
 {% endblock content %}
 
 
 {% block end_scripts %}
+  <script>
+    document.getElementById('cart-link').addEventListener('click', function() {
+      document.getElementById('booqable-launcher').click();
+      //bqButtons = document.querySelectorAll('.bq-branded.bq-button');
+      //bqButtons.forEach((btn) => {
+      //  if(btn.textContent === 'View cart') {
+      //    btn.click();
+      //  }
+      //});
+    });
+  </script>
   <script>
     var booqableOptions = {
       company: '784b5f81-a432-4dab-8e4b-5f81fbacf3d1'
