@@ -54,7 +54,7 @@
     <div id="{{ c.name.replace(' ','-') }}" class="faq-list">
       {% for i in faqs %}
         {% if i.category_id == c.id %}
-          <div class="mb-2">
+          <div class="my-3">
             <a class="fw-semibold" href="{{ url_for('edit_faq', id=i.id) }}">
               {{ i.question|safe }}
             </a><br>
