@@ -3,7 +3,7 @@
 {% block content %}
   <div class="row g-0">
     <div class="col-6 col-md-9">
-      <h1 class="d-none d-md-block">Frequently asked questions</h1>
+      <h1 class="d-none d-md-block mb-4">Frequently asked questions</h1>
       <h1 class="d-block d-md-none">FAQs</h1>
     </div>
 
@@ -12,13 +12,16 @@
     </div>
   </div>
   
-
-  {% for c in categories %}
-    {% for f in faqs %}
-      <h4 class="mb-0"><strong>{{ f.question|safe }}</strong></h4>
-      <p>{{ f.answer|safe }}</p>
-    {% endfor %}
-  {% endfor %}
+  <div class="row g-0 mt-3">
+    <div class="col">
+      {% for c in categories %}
+        {% for f in faqs %}
+          <h4 class="mb-1"><strong>{{ f.question|safe }}</strong></h4>
+          <p class="mb-4">{{ f.answer|safe }}</p>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
 
   <h4 class="mt-5">Ask another question</h4>
   <form action="" method="post">
