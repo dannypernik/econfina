@@ -2,8 +2,9 @@ import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, \
     request, send_from_directory, send_file, make_response
 from app import app, db, login, hcaptcha
-from app.forms import ContactForm, ItemForm, ItemCategoryForm, FaqForm, FaqCategoryForm, ReviewForm, \
-    EmailListForm, LoginForm, UserForm, RequestPasswordResetForm, ResetPasswordForm
+from app.forms import ContactForm, ItemForm, ItemCategoryForm, FaqForm, FaqCategoryForm, \
+    ReviewForm, EmailListForm, LoginForm, UserForm, RequestPasswordResetForm, \
+    ResetPasswordForm, SignupForm
 from flask_login import current_user, login_user, logout_user, login_required, login_url
 from app.models import User, Item, ItemCategory, Faq, FaqCategory, Review
 from werkzeug.urls import url_parse
@@ -530,6 +531,23 @@ def edit_review(id):
         form.order.data=review.order
         form.is_approved.data=review.is_approved
     return render_template('edit-review.html', title="Edit review", form=form, review=review)
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if current_user.is_authenticated:
+        flash('You are already signed in')
+        return redirect(url_for('index'))
+    form = SignupForm()
+    if form.validate_on_submit():
+        user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
+        email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash("You are now registered. We're glad you're here!")
+        return redirect(url_for('index'))
+    return render_template('signup.html', title='Sign up', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])

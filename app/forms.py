@@ -91,6 +91,25 @@ class EmailListForm(FlaskForm):
     submit = SubmitField()
 
 
+class SignupForm(FlaskForm):
+    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
+        validators=[InputRequired(), Email(message="Please enter a valid email address")])
+    first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
+        validators=[InputRequired()])
+    last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
+        validators=[InputRequired()])
+    password = PasswordField('Password', render_kw={"placeholder": "Password"}, \
+        validators=[InputRequired()])
+    password2 = PasswordField('Repeat Password', render_kw={"placeholder": "Repeat Password"}, \
+        validators=[InputRequired(), EqualTo('password',message="Passwords do not match.")])
+    submit = SubmitField('Join the movement')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('This email address has already been registered.')
+
+
 class LoginForm(FlaskForm):
     email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
