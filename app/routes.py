@@ -64,6 +64,7 @@ def index():
     form = ContactForm()
     vessels = Item.query.filter_by(category_id=1)
     categories = ItemCategory.query.order_by(ItemCategory.order).all()
+    reviews = Review.query.order_by(Review.order).all()
     booqable_id = request.args.get('id', None)
     if form.validate_on_submit():
         if hcaptcha.verify():
@@ -82,7 +83,8 @@ def index():
         else:
             flash('Email failed to send, please contact ' + admin_email + \
                 ' and paste your message: ' + message, 'error')
-    return render_template('index.html', form=form, vessels=vessels, categories=categories, booqable_id=booqable_id)
+    return render_template('index.html', form=form, vessels=vessels, categories=categories, \
+        reviews=reviews, booqable_id=booqable_id)
 
 
 @app.route('/about')
@@ -154,6 +156,32 @@ def faq():
             flash('Email failed to send, please contact ' + admin_email + \
                 ' and paste your message: ' + message, 'error')
     return render_template('faq.html', title="FAQ", form=form, faqs=faqs, categories=categories)
+
+
+@app.route('/landing-home', methods=['GET', 'POST'])
+def landing_home():
+    form = ContactForm()
+    vessels = Item.query.filter_by(category_id=1)
+    categories = ItemCategory.query.order_by(ItemCategory.order).all()
+    booqable_id = request.args.get('id', None)
+    if form.validate_on_submit():
+        if hcaptcha.verify():
+            pass
+        else:
+            flash('A computer has questioned your humanity. Please try again.', 'error')
+            return redirect(url_for('index'))
+        user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
+        message = form.message.data
+        subject = 'message'
+        email_status = send_contact_email(user, message, subject.title())
+        if email_status == 200:
+            send_confirmation_email(user, message, subject)
+            flash('Please check ' + user.email + ' for a confirmation email. Thank you for reaching out!')
+            return redirect(url_for('index', _anchor="home"))
+        else:
+            flash('Email failed to send, please contact ' + admin_email + \
+                ' and paste your message: ' + message, 'error')
+    return render_template('landing-home.html', form=form, vessels=vessels, categories=categories, booqable_id=booqable_id)
 
 
 @app.route('/landing-page')
