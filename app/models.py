@@ -64,7 +64,7 @@ class Item(db.Model):
     status = db.Column(db.String(16))
     category_id = db.Column(db.Integer, db.ForeignKey('item_category.id'))
     image_path = db.Column(db.String(128))
-    booqable_id = db.Column(db.String(32))
+    booqable_id = db.Column(db.String(128))
 
     def __repr__(self):
         return '<Item {}>'.format(self.name)
