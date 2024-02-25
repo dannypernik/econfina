@@ -60,7 +60,7 @@ class ReviewForm(FlaskForm):
     name = StringField('Name', render_kw={'placeholder': 'Name'})
     order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
         validators=(validators.Optional(),))
-    email = EmailField('Email', render_kw={'placeholder': 'Email'}, validators=[InputRequired()])
+    email = EmailField('Email', render_kw={'placeholder': 'Email'})
     is_approved = BooleanField('Approved')
     save = SubmitField('Send review')
 
