@@ -55,8 +55,7 @@ class ItemCategoryForm(FlaskForm):
 
 
 class ReviewForm(FlaskForm):
-    message = TextAreaField('Share your experience', render_kw={'placeholder': 'What did you think?'}, \
-        validators=[InputRequired()])
+    message = TextAreaField('Share your experience', render_kw={'placeholder': 'What did you think?'}, validators=[InputRequired()])
     name = StringField('Name', render_kw={'placeholder': 'Name'})
     order = DecimalField('Order', render_kw={'placeholder': 'Order'}, \
         validators=(validators.Optional(),))

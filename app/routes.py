@@ -481,7 +481,8 @@ def edit_reviews():
     pending_reviews = Review.query.filter_by(is_approved=False).order_by(Review.order)
 
     if form.validate_on_submit():
-        review = Review(name=form.name.data, message=form.message.data, email=form.email.data)
+        review = Review(name=form.name.data, message=form.message.data, email=form.email.data,
+            is_approved=True)
         try:
             db.session.add(review)
             db.session.flush()
