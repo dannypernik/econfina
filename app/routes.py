@@ -65,7 +65,7 @@ def index():
     form = ContactForm()
     vessels = Item.query.filter_by(category_id=1)
     categories = ItemCategory.query.order_by(ItemCategory.order).all()
-    reviews = Review.query.order_by(Review.order).all()
+    reviews = Review.query.filter_by(is_approved=True).order_by(Review.order)
     booqable_id = request.args.get('id', None)
     if form.validate_on_submit():
         if hcaptcha.verify():

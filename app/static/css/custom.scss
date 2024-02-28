@@ -458,6 +458,7 @@ div.message {
   height: 26px;
   padding-left: 15px;
   cursor: pointer;
+  padding-top: 3px;
 }
 
 .drawer__header {
@@ -792,10 +793,29 @@ div.message {
   margin-bottom: 2rem;
 }
 
-// Testimonials slider
+// Reviews slider
 
-.testimonials {
-	margin: 10rem 0 5rem;
+.swiper {
+  --swiper-pagination-bullet-inactive-color: white;
+  --swiper-pagination-bullet-inactive-opacity: 0.5; 
+  --swiper-pagination-color: #{$secondary-color};
+}
+
+.swiper-slide {
+  padding: 5rem 10rem;
+}
+
+.swiper-wrapper {
+  align-items: center;
+}
+
+.swiper-button-next, .swiper-button-prev {
+  --swiper-navigation-color:white;
+  --swiper-navigation-size: 20px;
+}
+
+.swiper-pagination {
+
 }
 
 .chevron {
