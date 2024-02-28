@@ -113,8 +113,9 @@
                 <!-- Slides -->
                 {% for r in reviews %}
                   <div class="swiper-slide">
-                    {{ r.message }}<br>
-                    &ndash; {{ r.name }}
+                    <p>{{ r.message }}</p>
+                    
+                    <p class="text-end fw-bold ">&mdash; {{ r.name }}</p>
                   </div>
                 {% endfor %}
               </div>
@@ -315,7 +316,7 @@
       loop: true,
       centeredSlides: true,
       autoplay: {
-        delay: 500000000,
+        delay: 5000,
         pauseOnMouseEnter: true,
       },
 
