@@ -7065,6 +7065,7 @@ div.message a {
   height: 26px;
   padding-left: 15px;
   cursor: pointer;
+  padding-top: 3px;
 }
 
 .drawer__header {
@@ -7361,8 +7362,23 @@ div.message a {
   margin-bottom: 2rem;
 }
 
-.testimonials {
-  margin: 10rem 0 5rem;
+.swiper {
+  --swiper-pagination-bullet-inactive-color: white;
+  --swiper-pagination-bullet-inactive-opacity: 0.5;
+  --swiper-pagination-color: #fc723c;
+}
+
+.swiper-slide {
+  padding: 5rem 10rem;
+}
+
+.swiper-wrapper {
+  align-items: center;
+}
+
+.swiper-button-next, .swiper-button-prev {
+  --swiper-navigation-color:white;
+  --swiper-navigation-size: 20px;
 }
 
 .chevron {
