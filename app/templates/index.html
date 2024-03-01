@@ -29,14 +29,17 @@
 
     <nav class="row justify-content-center g-0">
       <div class="col-11 col-md-10">
-        <div class="row justify-content-center">
-          <div class="d-none d-md-block col-md-5 col-lg-6 col-xl-7">
+        <div class="row justify-content-evenly">
+          <!-- <div class="col-1">
             <img id="home-logo" class="img-fluid" src="{{ url_for('static', filename='img/logo.png') }}" alt="">
-          </div>
-          <div class="home-nav col col-md-7 col-lg-6 col-xl-5">
-            <div><a href="#vessels" data-text="book now">book now</a></div>
-            <div><a href="{{ url_for('faq') }}" data-text="faq">faq</a></div>
-            <div><a href="#contact" data-text="contact">contact</a></div>
+          </div> -->
+          <div class="home-nav">
+            <div id="vid-toggle" class="nav-item">
+              <div id="pause-play"></div>
+            </div>
+            <div><a href="#vessels" class="nav-item" data-text="book now">book now</a></div>
+            <div><a href="{{ url_for('faq') }}" class="nav-item" data-text="faq">faq</a></div>
+            <div><a href="#contact" class="nav-item" data-text="contact">contact</a></div>
           </div>
         </div>
       </div>
@@ -44,11 +47,8 @@
 
     <div class="row justify-content-center">
       <div class="col-11 col-md-8">
+        <img id="home-logo" class="img-fluid" src="{{ url_for('static', filename='img/logo.png') }}" alt="">
         <h1 id="home-title">Canoe Econfina!</h1>
-        <h3>
-          <!-- Come paddle down Econfina Creek and soak in the serenity of
-          its crystal-clear freshwater cold springs. We are a canoe & kayak rental business with a shuttle service and over 30 years of happy customers! -->
-        </h3>
       </div>
     </div>
     <div class="row justify-content-center">
@@ -73,9 +73,7 @@
 
     <div class="row">
       <div class="col offset-1">
-        <div id="vid-toggle">
-          <div id="pause-play"></div>
-        </div>
+        
       </div>
     </div>
 
@@ -103,51 +101,51 @@
           </div>
           <div class="align-self-center ms-3">Watch the video</div>
         </a>
+      </div>
+    </div>
 
-        <div class="row">
-          <div class="col position-relative">
-            <!-- Slider main container -->
-            <div class="swiper">
-              <!-- Additional required wrapper -->
-              <div class="swiper-wrapper">
-                <!-- Slides -->
-                {% for r in reviews %}
-                  <div class="swiper-slide">
-                    <p>{{ r.message }}</p>
-                    
-                    <p class="text-end fw-bold ">&mdash; {{ r.name }}</p>
-                  </div>
-                {% endfor %}
+    <div class="row justify-content-center">
+      <div class="col col-sm-11 col-lg-8 position-relative">
+        <!-- Slider main container -->
+        <div class="swiper">
+          <!-- Additional required wrapper -->
+          <div class="swiper-wrapper">
+            <!-- Slides -->
+            {% for r in reviews %}
+              <div class="swiper-slide">
+                <p class="mb-1">{{ r.message }}</p>
+                
+                <p class="text-end fw-bold mb-0">&mdash; {{ r.name }}</p>
               </div>
-
-              <div class="swiper-pagination"></div>
-
-              <div class="swiper-button-prev swiper-button-white"></div>
-              <div class="swiper-button-next swiper-button-white"></div>
-            </div>
-              
+            {% endfor %}
           </div>
+
+          <div class="swiper-pagination mt-3"></div>
+
+          <div class="swiper-button-prev swiper-button-white"></div>
+          <div class="swiper-button-next swiper-button-white"></div>
         </div>
+          
+      </div>
+    </div>
          
         
 
-        <div class="text-center">
-          <a class="btn mb-2" href="{{ url_for('faq') }}">
-            Frequently asked questions
-          </a>
-        </div>
-        <div class="home-next">
-          <a href="#vessels">
-            <h4>
-              Paddle with us
-            </h4>
-            <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
-                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-            </svg>
-          </a>
-        </div>
-      </div>
+    <div class="text-center">
+      <a class="btn mb-2" href="{{ url_for('faq') }}">
+        Frequently asked questions
+      </a>
+    </div>
+    <div class="home-next">
+      <a href="#vessels">
+        <h4>
+          Paddle with us!
+        </h4>
+        <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+            fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+        </svg>
+      </a>
     </div>
   </div>
 

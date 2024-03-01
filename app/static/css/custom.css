@@ -6699,7 +6699,7 @@ html {
 body {
   height: 100%;
   font-family: "Montserrat", "Helvetica", sans-serif;
-  color: #067080;
+  color: #075169;
   font-size: 1.8rem;
   font-weight: 400;
   line-height: 1.6;
@@ -6767,7 +6767,7 @@ a {
 a:hover {
   text-decoration: underline;
   text-underline-offset: 7px;
-  text-decoration-color: #0ab9d3;
+  text-decoration-color: #0a7699;
 }
 a:before {
   display: block;
@@ -6801,13 +6801,6 @@ button:hover, .btn:hover, input[type=submit]:hover {
   background-color: #d45727;
   border-color: #d45727;
   color: white;
-}
-button.highlight, .btn.highlight, input[type=submit].highlight {
-  background-color: #0f2d2f;
-  border: none;
-}
-button.highlight:hover, .btn.highlight:hover, input[type=submit].highlight:hover {
-  background-color: #050f10;
 }
 button.sm, .btn.sm, input[type=submit].sm {
   font-weight: 400;
@@ -6859,7 +6852,7 @@ input, textarea {
   border-bottom: 1px solid #999;
   width: 100%;
   outline: none;
-  color: #088ea2;
+  color: #075169;
 }
 input:focus, textarea:focus {
   border-bottom: 1px solid #fc723c;
@@ -6884,11 +6877,11 @@ input[type=checkbox] + label::before {
   margin-right: 10px;
   width: 20px;
   height: 20px;
-  border: 2px solid #088ea2;
+  border: 2px solid #075169;
   border-radius: 3px;
 }
 input[type=checkbox]:checked + label::before {
-  background-color: #088ea2;
+  background-color: #075169;
 }
 input[type=checkbox]:checked + label::after {
   content: "";
@@ -6902,7 +6895,7 @@ input[type=checkbox]:checked + label::after {
   transform: rotate(-45deg);
 }
 input[type=checkbox]:focus + label::before {
-  box-shadow: 0 0px 8px #088ea2;
+  box-shadow: 0 0px 8px #075169;
 }
 
 input[type=radio] {
@@ -6924,7 +6917,7 @@ input[type=radio] + label::before {
   width: 2rem;
   height: 2rem;
   background: transparent;
-  border: 2px solid #088ea2;
+  border: 2px solid #075169;
   border-radius: 50%;
 }
 input[type=radio] + label::after {
@@ -6938,10 +6931,10 @@ input[type=radio] + label::after {
   height: 1rem;
 }
 input[type=radio]:checked + label::after {
-  background: #088ea2;
+  background: #075169;
 }
 input[type=radio]:focus + label::before {
-  box-shadow: 0 0px 8px #088ea2;
+  box-shadow: 0 0px 8px #075169;
 }
 
 .radio-wrapper {
@@ -6957,8 +6950,8 @@ input[type=radio]:focus + label::before {
 }
 
 select {
-  color: #088ea2;
-  border: 2px solid #088ea2;
+  color: #075169;
+  border: 2px solid #075169;
   border-radius: 10px;
   padding: 0.5rem 1rem;
 }
@@ -7029,19 +7022,45 @@ div.message a {
   position: relative;
 }
 
+.home-nav {
+  display: flex;
+  justify-content: space-between;
+  background-color: transparent;
+  border: none;
+}
+.home-nav li {
+  list-style: none;
+}
+.home-nav a {
+  color: white;
+  font-size: 2rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.home-nav a:hover, .home-nav a:focus {
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-color: #fc723c;
+  font-weight: 600;
+}
+
+.nav-item {
+  margin: calc(3rem + 2vw) 0 3rem;
+}
+
 .sticky-header {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
   border: none;
-  border-bottom: 1px solid #088ea2;
-  background-color: #088ea2;
+  border-bottom: 1px solid #052929;
+  background-color: #052929;
   z-index: 100;
 }
 
 #nav-img {
-  height: 36px;
-  margin: 12px 0;
+  height: 44px;
+  margin: 12px 0 14px;
   max-width: 100%;
 }
 
@@ -7052,7 +7071,7 @@ div.message a {
 #menu-btn {
   display: flex;
   justify-content: flex-end;
-  margin: 17px 0 17px auto;
+  margin-top: 20px;
   color: white;
   text-decoration: none;
 }
@@ -7069,8 +7088,8 @@ div.message a {
 }
 
 .drawer__header {
-  background-color: #088ea2;
-  padding: 0.65rem 2rem;
+  background-color: #052929;
+  padding: 0.75rem 2rem;
 }
 
 .menu-close {
@@ -7085,7 +7104,7 @@ div.message a {
 }
 
 .drawer__content {
-  background-color: #088ea2;
+  background-color: #052929;
 }
 .drawer__content a {
   display: inline;
@@ -7111,7 +7130,7 @@ div.message a {
   width: 100%;
   bottom: 0;
   padding: 20px;
-  background-color: #088ea2;
+  background-color: #052929;
   color: white;
   margin-top: 11rem;
   z-index: 2;
@@ -7131,13 +7150,13 @@ div.message a {
 }
 
 #vid-toggle {
-  position: absolute;
-  bottom: 4rem;
   border: 2px solid white;
   width: fit-content;
+  height: fit-content;
   padding: 6px;
   border-radius: 9px;
   opacity: 0.75;
+  margin: calc(3.3rem + 2vw) 0 3rem;
 }
 #vid-toggle:hover {
   cursor: pointer;
@@ -7208,12 +7227,12 @@ div.message a {
 #home-logo {
   position: relative;
   display: block;
-  margin: 3rem;
-  height: calc(8rem + 3vw);
+  margin: auto;
+  height: calc(25rem + 3vw);
 }
 
 #home-title {
-  margin-top: 10rem;
+  margin: 4rem auto 3rem;
   font-family: "Rock Salt", "Montserrat", Arial, Helvetica, sans-serif;
   font-size: calc(1.8rem + 3vw);
 }
@@ -7222,29 +7241,6 @@ div.message a {
   margin-top: 2rem;
   font-size: calc(1.75rem + 1vw);
   font-weight: 700;
-}
-
-.home-nav {
-  display: flex;
-  justify-content: space-between;
-  background-color: transparent;
-  border: none;
-}
-.home-nav li {
-  list-style: none;
-}
-.home-nav a {
-  color: white;
-  font-size: 2rem;
-  text-decoration: none;
-  padding: calc(5rem + 2vw) 0;
-  text-transform: uppercase;
-}
-.home-nav a:hover, .home-nav a:focus {
-  text-decoration: underline;
-  text-underline-offset: 7px;
-  text-decoration-color: #fc723c;
-  font-weight: 600;
 }
 
 .home-section {
@@ -7285,7 +7281,7 @@ div.message a {
   font-size: 1.6rem;
   font-weight: 600;
   transition: bottom 1s ease-in-out;
-  box-shadow: 0 2px 6px #777;
+  box-shadow: 0 2px 6px 3px #555;
 }
 
 .home-next {
@@ -7303,7 +7299,7 @@ div.message a {
   font-weight: 600;
 }
 .home-next:hover svg {
-  color: #0ab9d3;
+  color: #0a7699;
 }
 
 .bi-chevron-down {
@@ -7314,7 +7310,7 @@ div.message a {
   cursor: pointer;
 }
 #video-link:hover #play-video {
-  border-color: #0ab9d3;
+  border-color: #0a7699;
 }
 
 #play-video {
@@ -7369,7 +7365,7 @@ div.message a {
 }
 
 .swiper-slide {
-  padding: 5rem 10rem;
+  padding: 5rem calc(5rem + 2vw);
 }
 
 .swiper-wrapper {
@@ -7393,7 +7389,7 @@ div.message a {
   outline: none;
 }
 .chevron .circle {
-  fill: #088ea2;
+  fill: #075169;
   transition: 0.2s fill ease-in;
 }
 .chevron.left {
@@ -7440,7 +7436,7 @@ div.message a {
 }
 
 #home-2 {
-  background-color: #0f2d2f;
+  background-color: #052929;
 }
 
 .XMjzR:nth-child(2) {
