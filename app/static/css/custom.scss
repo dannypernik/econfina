@@ -11,9 +11,10 @@ $logo-color-4: #0f2d2f;
 $logo-color-5: #2e7d77;
 $logo-color-6: #3ba39c;
 $logo-color-7: #65b6b0;
-$primary-color: #088ea2;
+$primary-color: #075169; //#088ea2;
 $secondary-color: #fc723c;//58bba4;
 $highlight-color: #0f2d2f;//e97435;
+$forest-teal: #052929;
 $hover-color: lighten($primary-color, 10%);
 $alert-color: #850017;
 
@@ -53,7 +54,7 @@ html {
 body {
   height: 100%;
   font-family: $body-font;
-  color: darken($primary-color, 7%);
+  color: $primary-color;
   font-size: $body-font-size;
   font-weight: 400;
   line-height: 1.6;
@@ -160,15 +161,6 @@ button, .btn, input[type="submit"] {
 
   &:hover {
     @include fill-color();
-  }
-  
-  &.highlight {
-    background-color: $highlight-color;
-    border: none;
-
-    &:hover {
-      background-color: darken($highlight-color, 8%);//#b03e28;
-    }
   }
   
   &.sm {
@@ -422,19 +414,46 @@ div.message {
 
 // Nav //
 
+.home-nav {
+  display: flex;
+  justify-content: space-between;
+  background-color: transparent;
+  border: none;
+
+  li {
+    list-style: none;
+  }
+  
+  a {
+    color: white;
+    font-size: 2rem;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    &:hover, &:focus {
+      @include underline-hover();
+      font-weight: 600;
+    }
+  }
+}
+
+.nav-item {
+  margin: calc(3rem + 2vw) 0 3rem;
+}
+
 .sticky-header {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
   border: none;
-  border-bottom: 1px solid $primary-color;
-  background-color: $primary-color;
+  border-bottom: 1px solid $forest-teal;
+  background-color: $forest-teal;
   z-index: 100;
 }
 
 #nav-img {
-  height: 36px;
-  margin: 12px 0;
+  height: 44px;
+  margin: 12px 0 14px;
   max-width: 100%;
 }
 
@@ -445,7 +464,7 @@ div.message {
 #menu-btn {
   display: flex;
   justify-content: flex-end;
-  margin: 17px 0 17px auto;
+  margin-top: 20px;
   color: white;
   text-decoration: none;
 }
@@ -462,8 +481,8 @@ div.message {
 }
 
 .drawer__header {
-  background-color: $primary-color;
-  padding: 0.65rem 2rem;
+  background-color: $forest-teal;
+  padding: 0.75rem 2rem;
 }
 
 .menu-close {
@@ -479,7 +498,7 @@ div.message {
 }
 
 .drawer__content {
-  background-color: $primary-color;
+  background-color: $forest-teal;
 
   a {
     display: inline;
@@ -509,7 +528,7 @@ div.message {
   width: 100%;
   bottom: 0;
   padding: 20px;
-  background-color: $primary-color;
+  background-color: $forest-teal;
   color: white;
   margin-top: 11rem;
   z-index: 2;
@@ -535,13 +554,15 @@ div.message {
 }
 
 #vid-toggle {
-  position: absolute;
-  bottom: 4rem;
+  // position: absolute;
+  // top: 4rem;
   border: 2px solid white;
   width: fit-content;
+  height: fit-content;
   padding: 6px;
   border-radius: 9px;
   opacity: 0.75;
+  margin: calc(3.3rem + 2vw) 0 3rem;
 
   &:hover {
     cursor: pointer;
@@ -621,12 +642,12 @@ div.message {
 #home-logo {
   position: relative;
   display: block;
-  margin: 3rem;
-  height: calc(8rem + 3vw);
+  margin: auto;
+  height: calc(25rem + 3vw);
 }
 
 #home-title {
-  margin-top: 10rem;
+  margin: 4rem auto 3rem;
   font-family: 'Rock Salt', 'Montserrat', Arial, Helvetica, sans-serif;
   font-size: calc(1.8rem + 3vw);
 }
@@ -635,30 +656,6 @@ div.message {
   margin-top: 2rem;
   font-size: calc(1.75rem + 1vw);
   font-weight: 700;
-}
-
-.home-nav {
-  display: flex;
-  justify-content: space-between;
-  background-color: transparent;
-  border: none;
-
-  li {
-    list-style: none;
-  }
-  
-  a {
-    color: white;
-    font-size: 2rem;
-    text-decoration: none;
-    padding: calc(5rem + 2vw) 0;
-    text-transform: uppercase;
-
-    &:hover, &:focus {
-      @include underline-hover();
-      font-weight: 600;
-    }
-  }
 }
 
 .home-section {
@@ -706,7 +703,7 @@ div.message {
   font-size: 1.6rem;
   font-weight: 600;
   transition: bottom 1s ease-in-out;
-  box-shadow: 0 2px 6px #777;
+  box-shadow: 0 2px 6px 3px #555;
 }
 
 .home-next {
@@ -802,7 +799,7 @@ div.message {
 }
 
 .swiper-slide {
-  padding: 5rem 10rem;
+  padding: 5rem calc(5rem + 2vw);
 }
 
 .swiper-wrapper {
@@ -887,7 +884,7 @@ div.message {
 }
 
 #home-2 {
-  background-color: #0f2d2f;
+  background-color: $forest-teal;
 }
 
 // Vessel selected
