@@ -15,7 +15,8 @@ def validate_email(self, email):
 
 
 class ContactForm(FlaskForm):
-    first_name = StringField('First name', render_kw={"placeholder": "First name"})
+    first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
+        validators=[InputRequired()])
     email = EmailField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     phone = StringField('Phone number (optional)', render_kw={"placeholder": "Phone number (optional)"})
