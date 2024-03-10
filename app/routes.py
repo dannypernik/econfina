@@ -56,7 +56,7 @@ def get_quote():
 
 message, author = get_quote()
 
-admin_email = app.config['ADMIN_EMAIL']
+admin_email = app.config['MAIL_USERNAME']
 
 
 @app.route('/', methods=['GET', 'POST'])
