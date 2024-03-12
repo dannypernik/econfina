@@ -21,7 +21,7 @@ class ContactForm(FlaskForm):
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     phone = StringField('Phone number (optional)', render_kw={"placeholder": "Phone number (optional)"})
     message = TextAreaField('Message', validators=[InputRequired()])
-    submit = SubmitField('Submit')
+    submit = SubmitField('Send')
 
 
 class ItemForm(FlaskForm):
