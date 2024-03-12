@@ -575,6 +575,14 @@ div.message {
   }
 }
 
+@media(max-width: 767px) {
+  #vid-toggle {
+    position: absolute;
+    left: 5rem;
+    bottom: 5rem;
+  }
+}
+
 #pause-play {
   border: 0;
   background: transparent;
