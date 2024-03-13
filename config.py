@@ -9,7 +9,6 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    MAIL_NAME = os.environ.get('MAIL_NAME')
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     HCAPTCHA_SITE_KEY = os.environ.get('HCAPTCHA_SITE_KEY')
     HCAPTCHA_SECRET_KEY = os.environ.get('HCAPTCHA_SECRET_KEY')
