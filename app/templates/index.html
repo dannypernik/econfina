@@ -9,12 +9,12 @@
 {% endblock head %}
 
 {% block container %}
-  <div id="vid-overlay"></div>
-  <video id="welcome-vid" muted autoPlay playsInline poster="{{ url_for('static', filename='img/bg.webp') }}">
-    <source src="{{ url_for('static', filename='media/lay-z-owl-pexels.webm')}}" type="video/webm">
-  </video>
-
   <div id="home-1" class="inverse text-center">
+    <video id="welcome-vid" muted autoPlay playsInline poster="{{ url_for('static', filename='img/bg.webp') }}">
+      <source src="{{ url_for('static', filename='media/lay-z-owl-pexels.webm')}}" type="video/webm">
+    </video>
+    <div id="vid-overlay"></div>
+    
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}

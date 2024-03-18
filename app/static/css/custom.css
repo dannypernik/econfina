@@ -7192,12 +7192,13 @@ div.message a {
 
 #welcome-vid {
   object-fit: cover;
-  height: 100vh;
-  min-height: 70rem;
+  height: 100%;
+  min-height: 100vh;
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: -2;
 }
 
 #vid-overlay {
@@ -7207,7 +7208,7 @@ div.message a {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.25);
-  z-index: 1;
+  z-index: -1;
 }
 
 #home-1 {
