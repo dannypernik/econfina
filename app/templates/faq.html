@@ -16,7 +16,7 @@
     <div class="col">
       {% for c in categories %}
         {% for f in faqs %}
-          <h4 class="mb-1"><strong>{{ f.question|safe }}</strong></h4>
+          <h4 class="mb-2"><strong>{{ f.question|safe }}</strong></h4>
           <div class="mb-4">
             {{ f.answer|safe }}
           </div>
