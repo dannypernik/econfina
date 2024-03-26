@@ -1,50 +1,54 @@
 {% extends 'base.html' %}
  
-{% block content %}
-  <div class="row g-0">
-    <div class="col-6 col-md-9">
-      <h1 class="d-none d-md-block mb-4">Frequently asked questions</h1>
-      <h1 class="d-block d-md-none">FAQs</h1>
-    </div>
+{% block container %}
+  <div class="row title-margin justify-content-center">
+    <div class="col-11 col-lg-9 col-xl-8">
+      <div class="row g-0">
+        <div class="col-6 col-md-9">
+          <h1 class="d-none d-md-block mb-4">Frequently asked questions</h1>
+          <h1 class="d-block d-md-none">FAQs</h1>
+        </div>
 
-    <div class="col-6 col-md-3 text-end">
-      <a href="{{ url_for('choose_your_vessel') }}" class="btn sm mt-0">Book now</a>
-    </div>
-  </div>
-  
-  <div class="row g-0 mt-3">
-    <div class="col">
-      {% for c in categories %}
-        {% for f in faqs %}
-          <h4 class="mb-2"><strong>{{ f.question|safe }}</strong></h4>
-          <div class="mb-4">
-            {{ f.answer|safe }}
+        <div class="col-6 col-md-3 text-end">
+          <a href="{{ url_for('choose_your_vessel') }}" class="btn sm mt-0">Book now</a>
+        </div>
+      </div>
+      
+      <div class="row g-0 mt-3">
+        <div class="col">
+          {% for c in categories %}
+            {% for f in faqs %}
+              <h4 class="mb-2"><strong>{{ f.question|safe }}</strong></h4>
+              <div class="mb-4">
+                {{ f.answer|safe }}
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <h2 class="mt-5">Ask another question</h2>
+      <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="row g-0">
+          <div class="col-12">
+            {{ form.first_name }}
           </div>
-        {% endfor %}
-      {% endfor %}
+          <div class="col-12 col-md-6 pe-md-1 my-2">
+            {{ form.email }}
+          </div>
+          <div class="col-12 col-md-6 ps-md-1 my-2">
+            {{ form.phone }}
+          </div>
+        </div>
+        <div class="d-md-flex">
+          {{ form.message(rows='4', class="flex-grow-1", placeholder="Your question") }}
+          <div class="mb-3 mt-md-5 ms-md-2">
+            {{ hcaptcha }}
+          </div>
+        </div>
+        {{ form.submit }}
+      </form>
     </div>
   </div>
-
-  <h2 class="mt-5">Ask another question</h2>
-  <form action="" method="post">
-    {{ form.hidden_tag() }}
-    <div class="row g-0">
-      <div class="col-12">
-        {{ form.first_name }}
-      </div>
-      <div class="col-12 col-md-6 pe-md-1 my-2">
-        {{ form.email }}
-      </div>
-      <div class="col-12 col-md-6 ps-md-1 my-2">
-        {{ form.phone }}
-      </div>
-    </div>
-    <div class="d-md-flex">
-      {{ form.message(rows='4', class="flex-grow-1", placeholder="Your question") }}
-      <div class="mb-3 mt-md-5 ms-md-2">
-        {{ hcaptcha }}
-      </div>
-    </div>
-    {{ form.submit }}
-  </form>
-{% endblock content %}
+{% endblock container %}
