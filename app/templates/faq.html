@@ -17,7 +17,7 @@
       {% for c in categories %}
         {% for f in faqs %}
           <h4 class="mb-1"><strong>{{ f.question|safe }}</strong></h4>
-          <p class="mb-4">{{ f.answer|safe }}</p>
+          {{ f.answer|safe }}
         {% endfor %}
       {% endfor %}
     </div>
