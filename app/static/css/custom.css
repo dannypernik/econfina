@@ -6956,6 +6956,10 @@ select {
   padding: 0.5rem 1rem;
 }
 
+ul {
+  margin-top: 0.5rem;
+}
+
 .inverse {
   color: white;
 }
