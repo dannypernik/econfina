@@ -10,8 +10,8 @@
 
 {% block container %}
   <div id="home-1" class="inverse text-center">
-    <video id="welcome-vid" muted autoPlay playsInline poster="{{ url_for('static', filename='img/bg.webp') }}">
-      <source src="{{ url_for('static', filename='media/lay-z-owl-pexels.webm')}}" type="video/webm">
+    <video id="welcome-vid" muted autoPlay playsInline loop poster="{{ url_for('static', filename='img/bg.webp') }}">
+      <source src="{{ url_for('static', filename='media/bg.mp4')}}" type="video/webm">
     </video>
     <div id="vid-overlay"></div>
 
@@ -232,8 +232,8 @@
           <a href="mailto:hello@canoeeconfina.com">hello@canoeeconfina.com</a>
         </p>
         <p>
-          <a class="btn sec sm d-block mb-0 ms-0" href="{{ url_for('static', filename='img/canoe-econfina-map.pdf') }}" target="_blank">Download Map</a>
-          <a class="btn sec sm mb-0" href="{{ url_for('static', filename='img/canoe-econfina-waiver.pdf') }}" target="_blank">Download Waiver</a>
+          <!-- <a class="btn sec sm d-block mb-0 ms-0" href="{{ url_for('static', filename='img/canoe-econfina-map.pdf') }}" target="_blank">Download Map</a> -->
+          <a class="btn sec sm mb-0" href="{{ url_for('static', filename='files/EconfinaCreekCanoeRentalsWaiver.pdf') }}" target="_blank">Download Waiver</a>
         </p>
       </div>
       <div class="col-10 col-md-5 col-xl-5">
@@ -251,8 +251,8 @@
           <p class="mb-3">{{ form.email }}</p>
           <p class="mb-3">{{ form.phone }}</p>
           <div class="d-md-flex">
-            {{ form.message(class="flex-grow-1", placeholder="Your message") }}
-            <div class="mt-2 mt-md-5 ms-md-2">
+            {{ form.message(class="flex-grow-1", rows="3", placeholder="Your message") }}
+            <div class="mt-2 mt-md-3 ms-md-2">
               {{ hcaptcha }}
             </div>
           </div>
