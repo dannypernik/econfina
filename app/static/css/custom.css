@@ -7159,7 +7159,6 @@ div.message a {
   height: fit-content;
   padding: 6px;
   border-radius: 9px;
-  opacity: 0.75;
   margin: calc(3.3rem + 2vw) 0 3rem;
 }
 #vid-toggle:hover {
