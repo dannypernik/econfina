@@ -6694,7 +6694,6 @@ progress {
 html {
   height: 100%;
   scroll-padding-top: 60px;
-  scroll-behavior: smooth;
 }
 
 body {
@@ -7220,7 +7219,7 @@ div.message a {
 }
 
 #vessels {
-  background-color: #052929;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/bg.webp) center bottom no-repeat;
 }
 
 #home-1, #vessels {
@@ -7234,6 +7233,9 @@ div.message a {
 @media screen and (max-width: 575px) {
   #home-1, #vessels {
     background-attachment: scroll;
+  }
+  #vessels {
+    background: #052929;
   }
 }
 #home-logo {

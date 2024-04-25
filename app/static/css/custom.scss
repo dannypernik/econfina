@@ -49,7 +49,6 @@ $alert-color: #850017;
 html {
   height: 100%;
   scroll-padding-top: 60px;
-  scroll-behavior: smooth;
 }
 
 body {
@@ -635,8 +634,7 @@ div.message {
 }
 
 #vessels {
-  background-color: $forest-teal;
-  // background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/bg.webp) center bottom no-repeat;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/bg.webp) center bottom no-repeat;
 }
 
 #home-1, #vessels {
@@ -651,6 +649,10 @@ div.message {
 @media screen and (max-width: 575px) {
   #home-1, #vessels {
     background-attachment: scroll;
+  }
+
+  #vessels {
+    background: $forest-teal;
   }
 }
 
