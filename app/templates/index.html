@@ -11,6 +11,7 @@
 {% block container %}
   <div id="home-1" class="inverse text-center">
     <video id="welcome-vid" muted autoPlay playsInline loop poster="{{ url_for('static', filename='img/bg.webp') }}">
+      <source src="{{ url_for('static', filename='media/bg.webm')}}" type="video/webm">
       <source src="{{ url_for('static', filename='media/bg.mp4')}}" type="video/webm">
     </video>
     <div id="vid-overlay"></div>
