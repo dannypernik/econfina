@@ -6694,6 +6694,7 @@ progress {
 html {
   height: 100%;
   scroll-padding-top: 60px;
+  scroll-behavior: smooth;
 }
 
 body {
