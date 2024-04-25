@@ -7218,6 +7218,10 @@ div.message a {
   z-index: 2;
 }
 
+#vessels {
+  background-color: #052929;
+}
+
 #home-1, #vessels {
   position: relative;
   background-attachment: fixed;
