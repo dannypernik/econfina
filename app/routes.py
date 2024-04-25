@@ -796,3 +796,14 @@ for path in template_list:
     endpoint = path.replace('-','_')
     if endpoint not in endpoints:
         register_template_endpoint(path, endpoint)
+
+@app.route('/', defaults={'path': ''})
+@app.route('/carts/<path:path>')
+def catch_cart(path):
+    return render_template('carts.html', title='Cart')
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/checkout/<path:path>')
+def catch_checkout(path):
+    return render_template('checkout.html', title='Cart')
