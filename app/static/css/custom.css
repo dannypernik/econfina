@@ -7298,6 +7298,16 @@ div.message a {
   box-shadow: 0 2px 6px 3px #555;
 }
 
+.youtube-video {
+  aspect-ratio: 16/9;
+  width: 100%;
+}
+
+@media screen and (max-width: 575px) {
+  .youtube-video {
+    aspect-ratio: 1/1;
+  }
+}
 .home-next {
   display: table;
   margin: calc(1rem + 1vw) auto 3rem;
@@ -7347,6 +7357,11 @@ div.message a {
 
 #video-modal .modal-header {
   border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.modal-dialog {
+  height: fit-content;
 }
 
 .modal-fullscreen .modal-content {
