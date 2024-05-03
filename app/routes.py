@@ -99,6 +99,11 @@ def reviews():
     reviews = Review.query.filter_by(is_approved=True).order_by(Review.order)
 
     if form.validate_on_submit():
+        if hcaptcha.verify():
+            pass
+        else:
+            flash('A computer has questioned your humanity. Please try again.', 'error')
+            return redirect(url_for('reviews'))
         review = Review(message=form.message.data, name=form.name.data, email=form.email.data, \
             is_approved=False)
         user = User(first_name=form.name.data, email=form.email.data)
@@ -144,7 +149,7 @@ def faq():
             pass
         else:
             flash('A computer has questioned your humanity. Please try again.', 'error')
-            return redirect(url_for('index'))
+            return redirect(url_for('faq'))
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         subject = 'question'
@@ -170,7 +175,7 @@ def landing_home():
             pass
         else:
             flash('A computer has questioned your humanity. Please try again.', 'error')
-            return redirect(url_for('index'))
+            return redirect(url_for('landing-home'))
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         subject = 'message'
