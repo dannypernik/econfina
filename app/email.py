@@ -17,12 +17,12 @@ def send_contact_email(user, message, subject):
             {
                 "From": {
                     "Name": 'Canoe Econfina',
-                    "Email": app.config['MAIL_USERNAME'],
+                    "Email": app.config['MAIL_SENDER'],
                 },
                 "To": [
                     {
                         "Name": 'Canoe Econfina',
-                        "Email": app.config['MAIL_USERNAME']
+                        "Email": app.config['ADMIN_EMAIL']
                     }
                 ],
                 "Subject": subject + " from " + user.first_name,
@@ -52,7 +52,7 @@ def send_confirmation_email(user, message, subject):
             {
                 "From": {
                     "Name": 'Canoe Econfina',
-                    "Email": app.config['MAIL_USERNAME'],
+                    "Email": app.config['MAIL_SENDER'],
                 },
                 "To": [
                     {
@@ -86,12 +86,12 @@ def send_review_approval_email(review):
             {
                 "From": {
                     "Name": 'Canoe Econfina',
-                    "Email": app.config['MAIL_USERNAME'],
+                    "Email": app.config['MAIL_SENDER'],
                 },
                 "To": [
                     {
                         "Name": 'Canoe Econfina',
-                        "Email": app.config['MAIL_USERNAME']
+                        "Email": app.config['ADMIN_EMAIL']
                     }
                 ],
                 "Subject": "New review from " + review.name,
@@ -122,7 +122,7 @@ def send_verification_email(user):
             {
                 "From": {
                     "Name": 'Canoe Econfina',
-                    "Email": app.config['MAIL_USERNAME'],
+                    "Email": app.config['MAIL_SENDER'],
                 },
                 "To": [
                     {
@@ -161,7 +161,7 @@ def send_password_reset_email(user):
             {
                 "From": {
                     "Name": 'Canoe Econfina',
-                    "Email": app.config['MAIL_USERNAME'],
+                    "Email": app.config['MAIL_SENDER'],
                 },
                 "To": [
                     {

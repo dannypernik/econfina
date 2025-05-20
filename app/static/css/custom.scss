@@ -723,13 +723,13 @@ div.message {
   box-shadow: 0 2px 6px 3px #555;
 }
 
-.youtube-video {
+#youtube-video {
   aspect-ratio: 16 / 9;
   width: 100%;
 }
 
 @media screen and (max-width: 575px) {
-  .youtube-video {
+  #youtube-video {
     aspect-ratio: 1 / 1;
   }
 }

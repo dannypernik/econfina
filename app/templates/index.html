@@ -168,10 +168,10 @@
       <div class="modal-content">
         <div class="container-fluid">
           <div class="modal-header pt-1">
-            <span type="button" class="btn-close text-end" data-bs-dismiss="modal">×</span>
+            <span type="button" id="close-youtube-video" class="btn-close text-end" data-bs-dismiss="modal">×</span>
           </div>
           <div class="modal-body pt-1">
-            <iframe class="youtube-video" src="https://www.youtube.com/embed/hm9k11VbACs?si=b91I3qDXnShRZFtK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe id="youtube-video" src="https://www.youtube.com/embed/hm9k11VbACs?si=b91I3qDXnShRZFtK?enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
         </div>
       </div>
@@ -312,6 +312,11 @@
     vidToggle.onclick = function() {
       playPause('welcome-vid');
       document.getElementById('pause-play').classList.toggle('paused');
+    }
+
+    document.querySelector('.btn-close').onclick = function() {
+      var iframe = document.querySelector("#youtube-video");
+      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
     }
 
     //document.addEventListener("DOMContentLoaded", checkVideo);

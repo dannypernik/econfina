@@ -31,9 +31,9 @@
   <body>
     <div class="content">
       {% block navbar %}
-        
+
         {% include "_header-base.html" %}
-        
+
         {% block alerts %}
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -50,7 +50,7 @@
               {% endfor %}
             {% endfor %}
           {% endif %}
-            
+
         {% endblock alerts %}
       {% endblock navbar %}
 
@@ -98,13 +98,13 @@
                   11.114l4.758-2.876L1 5.383v5.73z"/>
                 </svg>
 
-                <a class="white ms-3" href="mailto:hello@canoeeconfina.com" target="_blank">hello@canoeeconfina.com</a>
+                <a class="white ms-3" href="mailto:{{admin_email}}" target="_blank">{{admin_email}}</a>
           </div>
           <div>
             <span id="copyright" class="me-3 h3 fw-normal">&copy;</span>
 
               <script>document.write(new Date().getFullYear())</script>
-              Econfina Creek Canoe Rentals 
+              Econfina Creek Canoe Rentals
           </div>
 
           <!-- <div class="d-md-none">
@@ -159,7 +159,7 @@
               </td>
               <td>
                 <script>document.write(new Date().getFullYear())</script>
-                Econfina Creek Canoe Rentals 
+                Econfina Creek Canoe Rentals
               </td>
             </tr>
             <tr class="d-md-none">
@@ -174,7 +174,7 @@
             </tr>
           </table> -->
         </div>
-          
+
         <div class="col-11 col-md-6 text-md-end">
           <span class="me-3 align-bottom"><img width="25" height="25" src="{{ url_for('static',
           filename='img/creatorsweb.svg') }}" alt=""></span><span>Designed in

@@ -21,6 +21,8 @@ def before_request():
         current_user.last_viewed = datetime.utcnow()
         db.session.commit()
 
+admin_email = app.config['ADMIN_EMAIL']
+
 def dir_last_updated(folder):
     return str(max(os.path.getmtime(os.path.join(root_path, f))
                    for root_path, dirs, files in os.walk(folder)
@@ -28,7 +30,7 @@ def dir_last_updated(folder):
 
 @app.context_processor
 def inject_values():
-    return dict(last_updated=dir_last_updated('app/static'))
+    return dict(last_updated=dir_last_updated('app/static'), admin_email=admin_email)
 
 def admin_required(f):
     @login_required
@@ -55,8 +57,6 @@ def get_quote():
     return message, author
 
 message, author = get_quote()
-
-admin_email = app.config['MAIL_USERNAME']
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -85,7 +85,7 @@ def index():
             flash('Email failed to send, please contact ' + admin_email + \
                 ' and paste your message: ' + message, 'error')
     return render_template('index.html', form=form, vessels=vessels, categories=categories, \
-        reviews=reviews, booqable_id=booqable_id)
+        reviews=reviews, booqable_id=booqable_id, admin_email=admin_email)
 
 
 @app.route('/about')
@@ -235,7 +235,7 @@ def new_item():
         if filename != '':
             uploaded_file.save(os.path.join(app.root_path, 'static/img/items', filename))
             item.image_path = filename
-        
+
         try:
             db.session.add(item)
             db.session.flush()
