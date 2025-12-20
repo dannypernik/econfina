@@ -45,18 +45,18 @@ def admin_required(f):
     return wrap
 
 
-def get_quote():
-    try:
-        quote = requests.get("https://zenquotes.io/api/today")
+# def get_quote():
+#     try:
+#         quote = requests.get("https://zenquotes.io/api/today")
 
-        message = "\u301D" + quote.json()[0]['q'] + "\u301E"
-        author = "\u2013 " + quote.json()[0]['a']
-    except requests.exceptions.RequestException:
-        message = ""
-        author = ""
-    return message, author
+#         message = "\u301D" + quote.json()[0]['q'] + "\u301E"
+#         author = "\u2013 " + quote.json()[0]['a']
+#     except requests.exceptions.RequestException:
+#         message = ""
+#         author = ""
+#     return message, author
 
-message, author = get_quote()
+# message, author = get_quote()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -198,8 +198,8 @@ def landing_page():
 @app.route('/admin')
 @admin_required
 def admin():
-    message, author = get_quote()
-    return render_template('admin.html', title="Admin", message=message, author=author)
+    # message, author = get_quote()
+    return render_template('admin.html', title="Admin") #, message=message, author=author)
 
 
 @app.route('/edit-items', methods=['GET', 'POST'])
