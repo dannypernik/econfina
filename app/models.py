@@ -35,7 +35,7 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
     def get_email_verification_token(self, expires_in=3600):
         return jwt.encode(
             {'reset_password': self.id, 'exp': time() + expires_in},

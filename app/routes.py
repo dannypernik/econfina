@@ -9,7 +9,7 @@ from flask_login import current_user, login_user, logout_user, login_required, l
 from app.models import User, Item, ItemCategory, Faq, FaqCategory, Review
 from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
-from datetime import datetime
+from datetime import datetime, timezone, date
 from app.email import send_contact_email, send_verification_email, send_password_reset_email, \
     send_confirmation_email, send_review_approval_email
 from functools import wraps
@@ -18,7 +18,7 @@ import requests
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
-        current_user.last_viewed = datetime.utcnow()
+        current_user.last_viewed = datetime.now(timezone.utc)
         db.session.commit()
 
 admin_email = app.config['ADMIN_EMAIL']
@@ -135,8 +135,17 @@ def choose_your_vessel():
 @app.route('/vessel-selected')
 def vessel_selected():
     booqable_id = request.args.get('id', None)
+    today = datetime.now(timezone.utc)
+    start_date = date(today.year, 3, 31)
+    end_date = date(today.year, 10, 1)
+
+    if not start_date <= today.date() <= end_date:
+        is_booqable_active = False
+    else:
+        is_booqable_active = True
     sale_items = Item.query.filter(Item.booqable_id != booqable_id).order_by(Item.order)
-    return render_template('vessel-selected.html', title="Pickup time", booqable_id=booqable_id, sale_items=sale_items)
+    return render_template('vessel-selected.html', title="Pickup time",
+        booqable_id=booqable_id, sale_items=sale_items, is_booqable_active=is_booqable_active)
 
 
 @app.route('/faq', methods=['GET', 'POST'])
