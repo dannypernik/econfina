@@ -173,37 +173,6 @@ def faq():
     return render_template('faq.html', title="FAQ", form=form, faqs=faqs, categories=categories)
 
 
-@app.route('/landing-home', methods=['GET', 'POST'])
-def landing_home():
-    form = ContactForm()
-    vessels = Item.query.filter_by(category_id=1)
-    categories = ItemCategory.query.order_by(ItemCategory.order).all()
-    booqable_id = request.args.get('id', None)
-    if form.validate_on_submit():
-        if hcaptcha.verify():
-            pass
-        else:
-            flash('A computer has questioned your humanity. Please try again.', 'error')
-            return redirect(url_for('landing-home'))
-        user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
-        message = form.message.data
-        subject = 'message'
-        email_status = send_contact_email(user, message, subject.title())
-        if email_status == 200:
-            send_confirmation_email(user, message, subject)
-            flash('Please check ' + user.email + ' for a confirmation email. Thank you for reaching out!')
-            return redirect(url_for('index', _anchor="home"))
-        else:
-            flash('Email failed to send, please contact ' + admin_email + \
-                ' and paste your message: ' + message, 'error')
-    return render_template('landing-home.html', form=form, vessels=vessels, categories=categories, booqable_id=booqable_id)
-
-
-@app.route('/landing-page')
-def landing_page():
-    return render_template('landing-page.html', title="")
-
-
 @app.route('/admin')
 @admin_required
 def admin():
