@@ -137,7 +137,7 @@ def vessel_selected():
     booqable_id = request.args.get('id', None)
     today = datetime.now(timezone.utc)
     start_date = date(today.year, 3, 31)
-    end_date = date(today.year, 10, 1)
+    end_date = date(today.year, 9, 30)
 
     if not start_date <= today.date() <= end_date:
         is_booqable_active = False
